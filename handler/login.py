@@ -20,9 +20,12 @@ class LoginHandler:
             return userPassword[0]
 
 
-
+    # Currently checks if password is password
     def attemptUserLogin(self, email, password):
-        userPassword = self._getUserLoginInfo(email)
+        # When ready to implement, uncomment this line.
+       # userPassword = self._getUserLoginInfo(email)
+
+        userPassword = 'password'
         if (userPassword==None):
             return jsonify(Error="User email not found."), 404
         else:
@@ -35,9 +38,15 @@ class LoginHandler:
             return jsonify(loginAttempt)
 
 
+    # currently returns email as available
     def confirmNewUser(self, email):
-        dao = LoginDAO()
-        user = dao.getUserByEmail(email)
+        # When ready to implement, uncomment these lines
+        #dao = LoginDAO()
+        #user = dao.getUserByEmail(email)
+
+       # Defaults user as available
+        user=[]
+
         if user:
             return jsonify(Error="User email already exists"), 300  # Don't know codes yet
         else:
@@ -46,9 +55,16 @@ class LoginHandler:
             confirmed['availability']='available'
             return jsonify(confirmed)
 
+
+
     def createNewUser(self, credentials):
-        dao = LoginDAO()
-        user = dao.getUserByEmail(credentials['email'])
+        # When ready, ucmooment these lines
+        #dao = LoginDAO()
+        #user = dao.getUserByEmail(credentials['email'])
+
+        #default to valid new user
+        user = []
+
         if user:
             return jsonify(Error="User email already exists"), 300  # Don't know codes yet
         else:
@@ -57,11 +73,15 @@ class LoginHandler:
             password = credentials['password']
             fname = credentials['fname']
             lname = credentials['lname']
-            uid = dao.insertNewUser(uname=uname, email=email,
-                                    password=password, fname=fname,
-                                    lname=lname)
-            credentials['uid']=uid
-            return jsonify(credentials)
+
+           #Default value for testing
+            response={}
+            response['uid']=69
+           # When ready, ucomment this line
+           # uid = dao.insertNewUser(uname=uname, email=email,
+           #                          password=password, fname=fname,
+           #                          lname=lname)
+            return jsonify(response)
 
 
 

@@ -16,23 +16,22 @@ CORS(app)
 def greeting():
     return 'Hello, this is the parts DB App! Brian is currently messing things up.'
 
-
-@app.route('/login/submit', methods=['GET'])
-def attemptLogin():
+@app.route('/api/login/<email>&<password>', methods=['GET'])
+def attemptLogin(email, password):
     if request.method == 'GET':
         return LoginHandler().attemptUserLogin(
-            email='brianrodrig@gail.com',
-            password='pasword')
+            email=email,
+            password=password)
     else:
         return jsonify(Error="Method not allowed."), 405
 
 
 
-@app.route('/NewUser/submit', methods=['GET', 'POST'])
+@app.route('/api/register-user', methods=['POST'])
 def createNewUser():
-    if request.method == 'GET':
-        return LoginHandler().confirmNewUser(email='brianrdrg@gmail.com')
-    else:
+    if request.method == 'POST':
+
+        # Hardwired credential object
         credentials={}
         credentials['uname']='testname'
         credentials['email']='abc@upr.edu'
@@ -41,6 +40,9 @@ def createNewUser():
         credentials['lname']='Dalmau'
 
         return LoginHandler().createNewUser(credentials=credentials)
+
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 
