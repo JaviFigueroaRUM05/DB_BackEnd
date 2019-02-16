@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from handler.parts import PartHandler
 from handler.supplier import SupplierHandler
+from handler.login import LoginHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -13,7 +14,39 @@ CORS(app)
 
 @app.route('/')
 def greeting():
-    return 'Hello, this is the parts DB App!'
+    return 'Hello, this is the parts DB App! Brian is currently messing things up.'
+
+
+@app.route('/login/submit', methods=['GET'])
+def attemptLogin():
+    if request.method == 'GET':
+        return LoginHandler().attemptUserLogin(
+            email='brianrodrig@gail.com',
+            password='pasword')
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+
+@app.route('/NewUser/submit', methods=['GET', 'POST'])
+def createNewUser():
+    if request.method == 'GET':
+        return LoginHandler().confirmNewUser(email='brianrdrg@gmail.com')
+    else:
+        credentials={}
+        credentials['uname']='testname'
+        credentials['email']='abc@upr.edu'
+        credentials['password']='testpass'
+        credentials['fname']='Juan'
+        credentials['lname']='Dalmau'
+
+        return LoginHandler().createNewUser(credentials=credentials)
+
+
+
+
+
+# Old routes
 
 @app.route('/PartApp/parts', methods=['GET', 'POST'])
 def getAllParts():
