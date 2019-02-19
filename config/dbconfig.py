@@ -2,7 +2,7 @@
 
 pg_config = {
     'user' : 'briandb',
-    'passwd' : 'password',
+    'passwd' : 'TheParodicts1',
     'dbname' : 'testdb',
     'host': '127.0.0.1'
 }
