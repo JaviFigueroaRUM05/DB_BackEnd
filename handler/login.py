@@ -20,10 +20,19 @@ class LoginHandler:
             return userPassword[0]
 
 
-    # Currently checks if password is password
+    def getUserbyId(self, id):
+        dao = LoginDAO()
+        user = dao.getUserById(id)
+        if not user:
+            return None
+        else:
+            return user[1]
+
+
+        # Currently checks if password is password
     def attemptUserLogin(self, email, password):
         # When ready to implement, uncomment this line.
-       # userPassword = self._getUserLoginInfo(email)
+        # userPassword = self._getUserLoginInfo(email)
 
         userPassword = 'password'
         if (userPassword==None):
@@ -38,6 +47,7 @@ class LoginHandler:
             return jsonify(loginAttempt)
 
 
+
     # currently returns email as available
     def confirmNewUser(self, email):
         # When ready to implement, uncomment these lines
@@ -46,7 +56,6 @@ class LoginHandler:
 
        # Defaults user as available
         user=[]
-
         if user:
             return jsonify(Error="User email already exists"), 300  # Don't know codes yet
         else:
@@ -57,6 +66,7 @@ class LoginHandler:
 
 
 
+
     def createNewUser(self, credentials):
         # When ready, ucmooment these lines
         #dao = LoginDAO()
@@ -64,7 +74,6 @@ class LoginHandler:
 
         #default to valid new user
         user = []
-
         if user:
             return jsonify(Error="User email already exists"), 300  # Don't know codes yet
         else:
@@ -84,8 +93,7 @@ class LoginHandler:
             return jsonify(response)
 
 
-
-   #Old methods
+   # Old methods
 
     def insertPart(self, form):
         print("form: ", form)
@@ -143,7 +151,3 @@ class LoginHandler:
                     return jsonify(Part=result), 200
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
-
-
-
-
