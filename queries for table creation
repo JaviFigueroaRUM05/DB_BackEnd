@@ -1,3 +1,5 @@
 create table chat_groups(gid serial primary key, gname varchar(20), gphoto varchar(200), gadmin integer references users(uid));
 
 create table Users(uid serial primary key, uname varchar(20), email varchar(20), password varchar(20), fname varchar(20), lname varchar(20), photo varchar(200)); 
+
+create table Contacts(tid serial, uid int references users(uid), cid int references users(uid));

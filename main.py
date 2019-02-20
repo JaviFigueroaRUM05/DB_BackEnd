@@ -3,6 +3,7 @@ from handler.parts import PartHandler
 from handler.supplier import SupplierHandler
 from handler.login import LoginHandler
 from handler.chat_groups import Chat_GroupsHandler
+from handler.contacts import ContactsHandler
 
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
@@ -42,6 +43,23 @@ def createNewUser():
         return LoginHandler().createNewUser(credentials=credentials)
     else:
         return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/api/contacts/<int:uid>', methods = ['GET'])
+def getAllContacts(uid):
+    if request.method == 'GET':
+        return ContactsHandler().getAllContacts(uid=uid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/api/contacts/<int:uid>&<int:cid>', methods = ['GET'])
+def getSpecificContact(uid, cid):
+    if request.method == 'GET':
+        return ContactsHandler().getSpecificContact(uid=uid, cid=cid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
 
 
 #tested
