@@ -1,9 +1,7 @@
 from flask import Flask, jsonify, request
-from handler.parts import PartHandler
-from handler.supplier import SupplierHandler
-from handler.login import LoginHandler
 from handler.chat_groups import Chat_GroupsHandler
 from handler.contacts import ContactsHandler
+from handler.login import LoginHandler
 
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
@@ -15,51 +13,78 @@ app = Flask(__name__)
 # Apply CORS to this app
 CORS(app)
 
+# Iterator keys for verifying needed keys
+CREATENEWUSERKEYS =['uname', 'email', 'password', 'fname', 'lname']
+LOGINKEYS = ['email', 'password']
+
 @app.route('/')
 def greeting():
     return 'Hello, this is the parts DB App! Sofia is currently trying to make things work in group related routes.'
 
-@app.route('/api/login/<email>&<password>', methods=['GET'])
-def attemptLogin(email, password):
-    if request.method == 'GET':
-        return LoginHandler().attemptUserLogin(
-            email=email,
-            password=password)
+
+# Uses form data to login user (email only)
+# Tested and Hardcoded
+@app.route('/api/login', methods=['POST'])
+def attemptLogin():
+    if request.method == 'POST':
+        for key in LOGINKEYS:
+            if key not in request.form:
+                return jsonify(Error='Missing credentials from submission: ' + key)
+            return LoginHandler().attemptUserLogin(
+                email=request.form['email'],
+                password=request.form['password'])
+        else:
+            return jsonify(Error='Missing credentials')
     else:
         return jsonify(Error="Method not allowed."), 405
 
 
-
+# Registers a new user
+# Tested and hardcoded
 @app.route('/api/register-user', methods=['POST'])
 def createNewUser():
     if request.method == 'POST':
-        # Hardwired credential object
-        credentials={}
-        credentials['uname']='testname'
-        credentials['email']='abc@upr.edu'
-        credentials['password']='testpass'
-        credentials['fname']='Juan'
-        credentials['lname']='Dalmau'
+        credentials = {}
+        for key in CREATENEWUSERKEYS:
+            if key not in request.form:
+                return jsonify(Error='Missing credentials from submission: '+ key)
+            else:
+                credentials[key] = request.form[key]
         return LoginHandler().createNewUser(credentials=credentials)
     else:
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/api/contacts/<int:uid>', methods = ['GET'])
-def getAllContacts(uid):
+# Gets user contacts, adds or deletes user contacts
+# Tested and hardcoded
+#TODO Verify user is uid user
+@app.route('/api/contacts', methods=['GET','POST','DELETE'])
+def getAllContacts():
+    if not request.args.get('uid'):
+        return jsonify(Error='Missing credentials from submission: uid')
     if request.method == 'GET':
-        return ContactsHandler().getAllContacts(uid=uid)
+        if not request.args.get('cid'):
+            return ContactsHandler().getAllContacts(uid=request.args['uid'])
+        else:
+            return ContactsHandler().getSpecificContact(uid=request.args['uid'],
+                                                        cid=request.args['cid'])
+    if request.method == 'POST':
+        if not request.args.get('cid'):
+            return jsonify(Error='Missing credentials from POST submission: cid')
+        if request.args['uid']== request.args['cid']:
+            return jsonify(Error='Submitted UID is same as submitted CID '
+                                 'for adding contact.')
+        else:
+            return ContactsHandler().addContact(uid=request.args['uid'],
+                                                cid=request.args['cid'])
+    if request.method == 'DELETE':
+        if not request.args.get('cid'):
+            return jsonify(Error='Missing credentials from DELETE submission: cid')
+        else:
+            return ContactsHandler().removeContact(uid=request.args['uid'],
+                                                   cid=request.args['cid'])
     else:
         return jsonify(Error="Method not allowed."), 405
-
-@app.route('/api/contacts/<int:uid>&<int:cid>', methods = ['GET'])
-def getSpecificContact(uid, cid):
-    if request.method == 'GET':
-        return ContactsHandler().getSpecificContact(uid=uid, cid=cid)
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-
 
 
 #tested
