@@ -36,6 +36,8 @@ class ContactsDAO:
         return result
 
 # Currently allows duplicate entries
+    # Uses logic in python.
+    # TODO put logic in sql.
     def addContactById(self, uid, cid):
         contactExists = self.getContactById(uid=cid)
         if not contactExists:
@@ -43,6 +45,28 @@ class ContactsDAO:
         cursor = self.conn.cursor()
         query = "insert into contacts(uid,cid) values(%s, %s);"
         cursor.execute(query, (uid, cid,))
+        self.conn.commit()
+        return {'contactCreated': True}
+
+# TODO modify/verify this ugly query to actually work with new tables.
+    def addContactByEmail(self, uid, fname, lname, email):
+        cursor = self.conn.cursor()
+        query = "insert into contacts(uid,cid) " \
+                "values(%s, select uid from users where " \
+                "pid=(select pid from person where fname=%s " \
+                "and lname=%s and email=%s));"
+        cursor.execute(query, (uid, fname, lname, email, ))
+        self.conn.commit()
+        return {'contactCreated': True}
+
+    # TODO modify/verify this ugly query to actually work with new tables.
+    def addContactByPhone(self, uid, fname, lname, phone):
+        cursor = self.conn.cursor()
+        query = "insert into contacts(uid,cid) " \
+                "values(%s, select uid from users where " \
+                "pid=(select pid from person where fname=%s " \
+                "and lname=%s and phone=%s));"
+        cursor.execute(query, (uid, fname, lname, phone,))
         self.conn.commit()
         return {'contactCreated': True}
 

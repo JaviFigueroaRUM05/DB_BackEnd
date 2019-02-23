@@ -59,12 +59,15 @@ class ContactsHandler:
             return 'User Not Found'
         return result
 
-
-    def addContact(self, uid, cid):
-        # Verify user/cid
-        # create new entry if not existant
-        # dao= ContactsDAO()
-        # addResult = dao.addContactById(uid=uid, cid=cid)
+    def addContact(self, uid, fname, lname, email='', phone=0):
+        # TODO Verify this is functional with new tables once implemented
+        # dao = ContactsDAO()
+        # if email:
+        #  addResult = dao.addContactByEmail(uid=uid, fname=fname,
+        #                                    lname=lname, email=email)
+        # elif phone > 0:
+        #  addResult = dao.addContactByPhone(uid=uid, fname=fname,
+        #                                    lname=lname, phone=phone)
         # if not addResult:
         #     return jsonify(Error='The contact you are trying to '
         #                          'add does not exist.')

@@ -11,15 +11,6 @@ class LoginDAO:
                                                                     pg_config['host'])
         self.conn = psycopg2._connect(connection_url)
 
-    def getAllUsers(self):
-        cursor = self.conn.cursor()
-        query = "select * from users;"
-        cursor.execute(query)
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
-
     def getUserById(self, uid):
         cursor = self.conn.cursor()
         query = "select * from users where uid = %s;"
@@ -50,7 +41,8 @@ class LoginDAO:
 
     def insertNewUser(self, uname, email, password, fname, lname):
         cursor = self.conn.cursor()
-        query = "insert into users(uname, email, password, fname, lname) values (%s, %s, %s, %s, %s) returning uid;"
+        query = "insert into users(uname, email, password, fname," \
+                " lname) values (%s, %s, %s, %s, %s) returning uid;"
         cursor.execute(query, (uname, email, password, fname, lname))
         uid = cursor.fetchone()[0]
         self.conn.commit()

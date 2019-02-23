@@ -42,6 +42,7 @@ class LoginHandler:
             loginAttempt['email']=email
             if password==userPassword:
                 loginAttempt['login']='Success'
+                loginAttempt['uid']='5'
             else:
                 loginAttempt['login'] = 'Failure'
             return jsonify(loginAttempt)
@@ -66,11 +67,12 @@ class LoginHandler:
 
 
 
-
+# Todo Move some of this logic into sql in DAO
     def createNewUser(self, credentials):
         # When ready, ucmooment these lines
         #dao = LoginDAO()
         #user = dao.getUserByEmail(credentials['email'])
+
 
         #default to valid new user
         user = []
