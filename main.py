@@ -3,6 +3,8 @@ from handler.contacts import ContactsHandler
 from handler.login import LoginHandler
 from handler.chat_groups import Chat_GroupsHandler
 from handler.posts import PostsHandler
+from handler.interactions import InteractionHandler
+
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -101,12 +103,18 @@ def deleteContact(uid, cid):
 @app.route('/api/chat-groups/groups', methods=['POST', 'GET'])
 def getAllChatGroups():
     if request.method == 'POST':
-        g_info = {}
-        g_info['gname']='group1'
-        g_info['gphoto']='default'
+        json = request.get_json()
+        try:
+            g_info           = {}
+            g_info['gname']  = json['gname']
+            g_info['gphoto'] = json['gphoto']
+        except:
+            return jsonify(Error="Unexpected attribute in POST request."), 405
         return Chat_GroupsHandler().createNewGroup(g_info=g_info)
+
     if request.method == 'GET':
         return Chat_GroupsHandler().getAllGroups()
+    
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -135,15 +143,21 @@ def getUsersInGroup(gid):
 @app.route('/api/chat-groups/users/<int:gid>/<int:uid>', methods=['POST', 'DELETE'])
 def modUsersInGroup(gid, uid):
     if request.method == 'POST':
-        credentials={}
-        credentials['uname']='testname'
-        credentials['email']='abc@upr.edu'
-        credentials['password']='testpass'
-        credentials['fname']='Juan'
-        credentials['lname']='Dalmau'
+        json = request.get_json()
+        try:
+            credentials             = {}
+            credentials['uname']    = json['uname']
+            credentials['email']    = json['email']
+            credentials['password'] = json['password']
+            credentials['fname']    = json['fname']
+            credentials['lname']    = json['lname']
+        except:
+            return jsonify(Error="Unexpected attribute in POST request."), 405
         return Chat_GroupsHandler().addUserToGroup(credentials)
+
     elif request.method == 'DELETE':
         return Chat_GroupsHandler().removeUserFromGroup(gid, uid)
+    
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -153,13 +167,19 @@ def modUsersInGroup(gid, uid):
 @app.route('/api/posts/group/<int:id>', methods=['POST', 'GET'])
 def getGroupPosts(id):
     if request.method == 'POST':
-        p_info={}
-        p_info['post_date'] = '2019-06-23'
-        p_info['media'] = 'default'
-        p_info['message'] = 'I hope everything is going well'
+        json = request.get_json()
+        try:
+            p_info              = {}
+            p_info['post_date'] = json['post_date']
+            p_info['media']     = json['media']
+            p_info['message']   = json['message']
+        except:
+            return jsonify(Error="Unexpected attribute in POST request."), 405
         return PostsHandler().createNewPost(p_info=p_info)
+
     elif request.method == 'GET':
         return PostsHandler().getPostsByGroup(id)
+
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -171,6 +191,15 @@ def getUserPosts(id):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+#------------------------------ Interactions -----------------------------------
+
+@app.route('/api/posts/<int:pid>', methods=['PUT', 'POST'])
+def updateInteraction(pid):
+    if request.method == 'PUT':
+        #data = request.get_json()
+        return InteractionHandler().updateReaction(pid, request.json)
+    elif request.method == 'POST':
+        return InteractionHandler().postReply(pid, request.json)
 
 if __name__ == '__main__':
     app.run(debug=True)
