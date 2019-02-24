@@ -24,74 +24,73 @@ def greeting():
     return 'Hello, this is the parts DB App! Sofia is currently trying to make things work in group related routes.'
 
 
-# Uses form data to login user (email only)
+# Uses json data to login user (email only)
 # Tested and Hardcoded
 @app.route('/api/login', methods=['POST'])
 def attemptLogin():
     if request.method == 'POST':
         for key in LOGINKEYS:
-            if key not in request.form:
+            if key not in request.json:
                 return jsonify(Error='Missing credentials from submission: ' + key)
         return LoginHandler().attemptUserLogin(
-            email=request.form['email'],
-            password=request.form['password'])
+            email=request.json['email'],
+            password=request.json['password'])
     else:
         return jsonify(Error="Method not allowed."), 405
 
 
-# Registers a new user using form data.
+# Registers a new user using json data.
 # Tested and hardcoded
 @app.route('/api/register-user', methods=['POST'])
 def createNewUser():
     if request.method == 'POST':
         credentials = {}
         for key in CREATENEWUSERKEYS:
-            if key not in request.form:
+            if key not in request.json:
                 return jsonify(Error='Missing credentials from submission: '+ key)
             else:
-                credentials[key] = request.form[key]
+                credentials[key] = request.json[key]
         return LoginHandler().createNewUser(credentials=credentials)
     else:
         return jsonify(Error="Method not allowed."), 405
 
 
-# Gets user contacts, adds or deletes user contacts using args or form data
+# Gets user contacts, adds or deletes user contacts using json data
 # Tested and hardcoded
 # TODO Verify user is uid user
-@app.route('/api/contacts', methods=['GET','POST','DELETE'])
-def getAllContacts():
-    if not request.args.get('uid'):
-        return jsonify(Error='Missing credentials from submission: uid')
+@app.route('/api/contacts/<int:uid>', methods=['GET','POST'])
+def getAllContacts(uid):
     if request.method == 'GET':
-        if not request.args.get('cid'):
-            return ContactsHandler().getAllContacts(uid=request.args['uid'])
-        else:
-            return ContactsHandler().getSpecificContact(uid=request.args['uid'],
-                                                        cid=request.args['cid'])
+        return ContactsHandler().getAllContacts(uid=uid)
     if request.method == 'POST':
         for key in ADDCONTACTNAMEKEYS:
-            if key not in request.form:
+            if key not in request.json:
                 return jsonify(Error='Missing credentials from submission: ' + key)
-        if request.form.get('email'):
-            return ContactsHandler().addContact(uid=request.args['uid'],
-                                                fname=request.form['fname'],
-                                                lname=request.form['lname'],
-                                                email=request.form['email'])
-        elif request.form.get('phone'):
-            return ContactsHandler().addContact(uid=request.args['uid'],
-                                                fname=request.form['fname'],
-                                                lname=request.form['lname'],
-                                                phone=request.form['phone'])
+        if request.json.get('email'):
+            return ContactsHandler().addContact(uid=uid,
+                                                fname=request.json['fname'],
+                                                lname=request.json['lname'],
+                                                email=request.json['email'])
+        elif request.json.get('phone'):
+            return ContactsHandler().addContact(uid=uid,
+                                                fname=request.json['fname'],
+                                                lname=request.json['lname'],
+                                                phone=request.json['phone'])
         else:
             return jsonify(Error='Missing credentials from submission; '
                                  'Please submit either an email or phone number.')
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
+# TODO Verify user is uid user
+@app.route('/api/contacts/<int:uid>/<int:cid>', methods=['GET','DELETE'])
+def deleteContact(uid, cid):
     if request.method == 'DELETE':
-        if not request.args.get('cid'):
-            return jsonify(Error='Missing credentials from DELETE submission: cid')
-        else:
-            return ContactsHandler().removeContact(uid=request.args['uid'],
-                                                   cid=request.args['cid'])
+        return ContactsHandler().removeContact(uid=uid,
+                                               cid=cid)
+    if request.method == 'GET':
+        return ContactsHandler().getSpecificContact(uid=uid,
+                                                    cid=cid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
