@@ -17,4 +17,4 @@ You need the following software installed to run this application:
 
 Base code completed 11/30/17 by Dr. Manuel Rodríguez Martínez.
 
-Project in progress.
+Project in progress. Currently uses url route values, request.args and request.form for different routes.

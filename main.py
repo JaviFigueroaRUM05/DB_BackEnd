@@ -32,16 +32,14 @@ def attemptLogin():
         for key in LOGINKEYS:
             if key not in request.form:
                 return jsonify(Error='Missing credentials from submission: ' + key)
-            return LoginHandler().attemptUserLogin(
-                email=request.form['email'],
-                password=request.form['password'])
-        else:
-            return jsonify(Error='Missing credentials')
+        return LoginHandler().attemptUserLogin(
+            email=request.form['email'],
+            password=request.form['password'])
     else:
         return jsonify(Error="Method not allowed."), 405
 
 
-# Registers a new user
+# Registers a new user using form data.
 # Tested and hardcoded
 @app.route('/api/register-user', methods=['POST'])
 def createNewUser():
@@ -57,7 +55,7 @@ def createNewUser():
         return jsonify(Error="Method not allowed."), 405
 
 
-# Gets user contacts, adds or deletes user contacts
+# Gets user contacts, adds or deletes user contacts using args or form data
 # Tested and hardcoded
 # TODO Verify user is uid user
 @app.route('/api/contacts', methods=['GET','POST','DELETE'])

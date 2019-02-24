@@ -169,7 +169,7 @@ class Chat_GroupsHandler:
         # else:
         #     dao.deleteUserFromGroup(gid, uid)
         #     return jsonify(DeleteStatus = "OK"), 200
-        return jsonify(self.user[0])
+        return jsonify(self.users[0])
 
 
     def deleteGroup(self, gid):
