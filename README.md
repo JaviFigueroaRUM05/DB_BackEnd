@@ -1,10 +1,7 @@
-# PartsApp
-Parts Demo App for Database access.
+# [ICOM5016] DB Project
+By Brian Rodríguez Badillo, Sofía O. Saavedra Vélez, & Javier O. Figueroa Ríos
 
-This simple app shows how to build a REST API for the backend of a database application using Flask. The Database engine is PostgreSQL. the application manages data from three tables:
-1. Parts - information about the parts in the system.
-2. Suppliers - information about the suppliers.
-3. Supplies - information on which suppliers supply a set of parts. 
+This simple app uses a REST API for the backend of a database application using Flask. The Database engine is PostgreSQL. the application will manage data from a number of tables.
 
 The application is organized in three broad layers:
 1. Main - the main app module takes care to setup the routes for the REST API and calling the proper handler objects to process the request.
@@ -18,4 +15,6 @@ You need the following software installed to run this application:
 3. PgAdmin3 - app to manage the databases 
 4. Flask - web bases framework to implement the REST API.
 
-Completed 11/30/17
+Base code completed 11/30/17 by Dr. Manuel Rodríguez Martínez.
+
+Project in progress.

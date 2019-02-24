@@ -60,11 +60,10 @@ class Chat_GroupsDAO:
         result = cursor.fetchone()
         return result
 
-    def getGroupsByAdmin(self, gadmin):
+    def getGroupsByAdmin(self, admin):
         cursor = self.conn.cursor()
-        query = "select * from chat_groups where gadmin = %s;"
-        cursor.execute(query, (gadmin))
-        cursor.execute(query)
+        query = "select gid from chat_administration where admin = %s;"
+        cursor.execute(query, (admin,))
         result = []
         for row in cursor:
             result.append(row)
@@ -102,14 +101,27 @@ class Chat_GroupsDAO:
             added_users.append(uid)
         return added_users
 
-    def deleteGroup(self, gid):
+    #delete group from own's personal group collection
+    def deleteGroupIfUser(self, uid):
         cursor = self.conn.cursor()
-        query1 = "delete from chat_groups where gid = %s; "
-        query2 = "delete from participants where group_id = %s; "
-        cursor.execute(query2, (gid,))
-        cursor.execute(query1, (gid,))
+        query = "delete from participants where uid = %s; "
+        cursor.execute(query, (uid,))
         self.conn.commit()
-        return gid
+        return uid
+
+    def deleteGroupIfAdmin(self, uid):
+        cursor = self.conn.cursor()
+        query = "delete from chat_administration where uid = %s; "
+        cursor.execute(query, (uid,))
+        self.conn.commit()
+        return uid
+
+    def setGroupAdmin(self, uid, gid):
+        cursor = self.conn.cursor()
+        query = "insert into chat_administration(gid, admin) where values(%s, %s) returning uid; "
+        cursor.execute(query, (gid, uid,))
+        self.conn.commit()
+        return uid
 
     def deleteUserFromGroup(self, gid, uid):
         cursor = self.conn.cursor()

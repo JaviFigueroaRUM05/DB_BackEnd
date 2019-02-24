@@ -20,15 +20,6 @@ class LoginHandler:
             return userPassword[0]
 
 
-    def getUserbyId(self, id):
-        dao = LoginDAO()
-        user = dao.getUserById(id)
-        if not user:
-            return None
-        else:
-            return user[1]
-
-
         # Currently checks if password is password
     def attemptUserLogin(self, email, password):
         # When ready to implement, uncomment this line.
@@ -48,7 +39,6 @@ class LoginHandler:
             return jsonify(loginAttempt)
 
 
-
     # currently returns email as available
     def confirmNewUser(self, email):
         # When ready to implement, uncomment these lines
@@ -64,7 +54,6 @@ class LoginHandler:
             confirmed['email']=email
             confirmed['availability']='available'
             return jsonify(confirmed)
-
 
 
 # Todo Move some of this logic into sql in DAO
