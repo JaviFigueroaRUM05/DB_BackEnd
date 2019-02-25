@@ -1,0 +1,20 @@
+Aquí una breve explicación de cada entidad y realación de nuestro diagrama:
+
+ENTIDADES:
+1. USER - Esta entidad representa al usuario de nuestro app. Contiene un USERNAME y un PASSWORD, además hereda toda la información de contacto de PERSON.
+2. GROUP - Esta entidad representa los group chats de unestro app y contienen un NAME y un GROUP PHOTO.
+3. POST - Esta entidad representa los post en cada grupo. Consiste de un DATE, MESSAGE, y PHOTO.
+4. PERSON - Esta entidad representa la información de contacto de cada usuario.
+5. REACTION - Representa un like o un dislike a un post.
+6. HASHTAG - Representa un hashtag.
+
+RELACIONES:
+1. IS CONTACT OF - Denota que un usuario esta en la lista de contactos de otro usuario.
+2. ADMINISTERS - Relación que ata a un grupo con su usuario administrador.
+3. PARTICIPATES - Relación que ata a un grupo con sus usuarios participantes.
+4. REACTS - Ata a un usuario con un like/dislike a un post.
+5. POSTS - Ata a un usuario con un post.
+6. POSTED TO - Denota el grupo al que un post particular fue publicado.
+7. CAUSES REACTION - Ata un like/dislike con un post.
+8. IS TAGGED - Ata un hashtag con los posts en los que esta presente.
+9. REPLIES TO - Relación entre un post y los posts en respuesta al mismo.
