@@ -4,6 +4,7 @@ from dao.login import LoginDAO
 CREATENEWUSERKEYS = ['uname', 'email', 'password', 'first_name', 'last_name']
 LOGINKEYS = ['email', 'password']
 
+
 class LoginHandler:
 
     def build_login_dict(self, email, password):
@@ -11,7 +12,6 @@ class LoginHandler:
         result['email'] = email
         result['password'] = password
         return result
-
 
     def _getUserLoginInfo(self, email):
         dao = LoginDAO()
@@ -21,8 +21,8 @@ class LoginHandler:
         else:
             return userPassword[0]
 
-
         # Currently checks if password is password
+
     def attemptUserLogin(self, json):
         # When ready to implement, uncomment this line.
         # userPassword = self._getUserLoginInfo(email)
@@ -32,67 +32,55 @@ class LoginHandler:
                 return jsonify(Error='Missing credentials from submission: ' + key)
 
         userPassword = 'password'
-        if (userPassword==None):
+        if (userPassword == None):
             return jsonify(Error="User email not found."), 404
         else:
-            loginAttempt={}
-            loginAttempt['email']=json['email']
-            if json['password']==userPassword:
-                loginAttempt['login']='Success'
-                loginAttempt['uid']='5'
+            loginAttempt = {}
+            loginAttempt['email'] = json['email']
+            if json['password'] == userPassword:
+                loginAttempt['login'] = 'Success'
+                loginAttempt['uid'] = '5'
             else:
                 loginAttempt['login'] = 'Failure'
             return jsonify(loginAttempt)
 
-
     # currently returns email as available
     def confirmNewUser(self, email):
         # When ready to implement, uncomment these lines
-        #dao = LoginDAO()
-        #user = dao.getUserByEmail(email)
+        # dao = LoginDAO()
+        # user = dao.getUserByEmail(email)
 
-       # Defaults user as available
-        user=[]
-        if user:
-            return jsonify(Error="User email already exists"), 300  # Don't know codes yet
-        else:
-            confirmed={}
-            confirmed['email']=email
-            confirmed['availability']='available'
-            return jsonify(confirmed)
-
-
-# Todo Move some of this logic into sql in DAO
-    def createNewUser(self, json):
-        # When ready, ucmooment these lines
-        #dao = LoginDAO()
-        #user = dao.getUserByEmail(credentials['email'])
-
-
-
-        credentials = {}
-        for key in CREATENEWUSERKEYS:
-            if key not in json:
-                return jsonify(Error='Missing credentials from submission: ' + key)
-            else:
-                credentials[key] = json[key]
-
-        # default to valid new user
+        # Defaults user as available
         user = []
         if user:
             return jsonify(Error="User email already exists"), 300  # Don't know codes yet
         else:
-            uname = credentials['uname']
-            email = credentials['email']
-            password = credentials['password']
-            first_name = credentials['first_name']
-            last_name = credentials['last_name']
+            confirmed = {}
+            confirmed['email'] = email
+            confirmed['availability'] = 'available'
+            return jsonify(confirmed)
 
-           #Default value for testing
-            response={}
-            response['uid']=69
-           # When ready, ucomment this line
-           # uid = dao.insertNewUser(uname=uname, email=email,
-           #                          password=password, fname=first_name,
-           #                          lname=last_name)
+    # Todo Move some of this logic into sql in DAO
+    def createNewUser(self, json):
+        # When ready, ucmooment these lines
+        dao = LoginDAO()
+        # user = dao.getUserByEmail(credentials['email'])
+
+        for key in CREATENEWUSERKEYS:
+            if key not in json:
+                return jsonify(Error='Missing credentials from submission: ' + key)
+
+        # TODO remove this, just pass in the json, and handle any errors
+        # sent back from the DB.
+        # default to valid new user
+        user = []
+        if user:
+            return jsonify(Error="User email already exists"), 300  # Don't know codes yet
+
+        else:
+            # When ready, ucomment this line
+            uid = dao.insertNewUser(uname=json['uname'], email=json['email'],
+                                    password=json['password'], fname=json['first_name'],
+                                    lname=json['last_name'])
+            response = {'uid': uid}
             return jsonify(response)

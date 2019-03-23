@@ -24,94 +24,71 @@ def greeting():
 # Registers a new user using json data.
 @app.route('/user/register', methods=['POST'])
 def createNewUser():
-    if request.method == 'POST':
-        return LoginHandler().createNewUser(json=request.json)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'POST': return LoginHandler().createNewUser(json=request.json)
+    else:                        return jsonify(Error="Method not allowed."), 405
 
 
 # Uses json data to login user (email only)
 @app.route('/user/login', methods=['POST'])
 def attemptLogin():
-    if request.method == 'POST':
-        return LoginHandler().attemptUserLogin(json=request.json)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'POST': return LoginHandler().attemptUserLogin(json=request.json)
+    else:                        return jsonify(Error="Method not allowed."), 405
 
 
 # Gets User Contacts
 @app.route('/user/<int:uid>', methods=['GET'])
 def getUserInfo(uid):
-    if request.method == 'GET':
-        return UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'GET': return UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Gets User Contacts
 @app.route('/user/<int:uid>/contacts', methods=['GET'])
 def getAllContacts(uid):
-    if request.method == 'GET':
-        return UserHandler().getAllContacts(uid=uid)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'GET': return UserHandler().getAllContacts(uid=uid)
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # get a specific contact from a user's contact list.
 @app.route('/user/<int:uid>/contacts/<int:cid>', methods=['GET'])
 def getSpecificContact(uid, cid):
-    if request.method == 'GET':
-        return UserHandler().getSpecificContact(uid=uid,
-                                                cid=cid)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'GET': return UserHandler().getSpecificContact(uid=uid, cid=cid)
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Adds contact to user's contact list.
 @app.route('/user/<int:uid>/add-contact', methods=['POST'])
 def addContact(uid):
-    if request.method == 'POST':
-        return UserHandler().addContact(uid=uid,
-                                        json=request.json)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'POST': return UserHandler().addContact(uid=uid, json=request.json)
+    else:                        return jsonify(Error="Method not allowed."), 405
 
 
 # Delete a contact from a user's contact list.
 @app.route('/user/<int:uid>/delete-contact/<int:cid>', methods=['DELETE'])
 def deleteContact(uid, cid):
-    if request.method == 'DELETE':
-        return UserHandler().removeContact(uid=uid,
-                                           cid=cid)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'DELETE': return UserHandler().removeContact(uid=uid, cid=cid)
+    else:                          return jsonify(Error="Method not allowed."), 405
 
 
 # Get all users in the system.
 @app.route('/dashboard/users', methods=['GET'])
 def getAllUsers():
-    if request.method == 'GET':
-        return UserHandler().getAllUsers()  #TODO Implement Handler and verification.
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'GET': return UserHandler().getAllUsers()  #TODO Implement Handler and verification.
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Get info on a specific user.
 @app.route('/dashboard/users/<int:uid>', methods=['GET'])
 def getSpecificUser(uid):
-    if request.method == 'GET':
-        return UserHandler().getSpecificUser(uid=uid)  #TODO Implement Handler and verification.
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'GET': return UserHandler().getSpecificUser(uid=uid)  #TODO Implement Handler and verification.
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Get the contacts of a specific user.
 @app.route('/dashboard/users/<int:uid>/contacts', methods=['GET'])
 def getSpecificUserContacts(uid):
-    if request.method == 'GET':
-        return UserHandler().getSpecificUserContacts(uid=uid)  #TODO Implement Handler and verification.
-    else:
-        return jsonify(Error="Method not allowed."), 405
+    if request.method == 'GET': return UserHandler().getSpecificUserContacts(uid=uid)  #TODO Implement Handler and verification.
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 # ------------------------- Group Routes ----------------------------------------
 
