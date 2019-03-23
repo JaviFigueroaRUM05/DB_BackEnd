@@ -191,15 +191,82 @@ def getUserPosts(id):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-#------------------------------ Interactions -----------------------------------
 
-@app.route('/api/posts/<int:pid>', methods=['PUT', 'POST'])
-def updateInteraction(pid):
-    if request.method == 'PUT':
-        #data = request.get_json()
-        return InteractionHandler().updateReaction(pid, request.json)
-    elif request.method == 'POST':
-        return InteractionHandler().postReply(pid, request.json)
+# TODO: connect to handlers
+@app.route('/groups/<int:gid>/posts/<int:pid>/reaction', methods=['POST', 'PUT', 'DELETE'])
+def interaction(gid, pid):
+    if   request.method == 'POST':   return jsonify(Output="POST request received.")
+    elif request.method == 'PUT':    return jsonify(Output="PUT request received.")
+    elif request.method == 'DELETE': return jsonify(Output="DELETE request received.")
+    else:                            return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/trending', methods=['GET'])
+def dash_trending():
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/posts', methods=['GET'])
+def dash_posts():
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/posts/<int:pid>/replies', methods=['GET'])
+def dash_replies(pid):
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/posts/<int:pid>/reactions', methods=['GET'])
+def dash_reactions(pid):
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/posts/user/<int:uid>', methods=['GET'])
+def dash_user_posts(uid):
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/daily-posts', methods=['GET'])
+def dash_daily_posts():
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/daily-posts/user/<int:uid>', methods=['GET'])
+def dash_user_daily_posts(uid):
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/daily-replies', methods=['GET'])
+def dash_daily_replies():
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/daily-likes', methods=['GET'])
+def dash_daily_likes():
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/daily-dislikes', methods=['GET'])
+def dash_daily_dislikes():
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/active-users', methods=['GET'])
+def dash_active_users():
+    if request.method == 'GET': return jsonify(Output="GET request received.")
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+#------------------------------ Main -----------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
