@@ -1,8 +1,13 @@
 from flask import jsonify
 from dao.contacts import ContactsDAO
 
-
+ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
 class UserHandler:
+
+    # Iterator keys for verifying needed keys
+
+
+
 
     def getAllContacts(self, uid):
         # dao = ContactsDAO()
@@ -59,7 +64,7 @@ class UserHandler:
             return 'User Not Found'
         return result
 
-    def addContact(self, uid, fname, lname, email='', phone=0):
+    def addContact(self, uid, json):
         # TODO Verify this is functional with new tables once implemented
         # dao = ContactsDAO()
         # if email:
@@ -74,6 +79,17 @@ class UserHandler:
 
         # Hardcoded response JSON
         addResult = {"contactCreated": True}
+
+        for key in ADDCONTACTNAMEKEYS:
+            if key not in json:
+                return jsonify(Error='Missing credentials from submission: ' + key)
+
+        if json.get('email'):
+            addContactByEmail() #TODO implement
+        if json.get('phone'):
+            addContactByEmail() # TODO implement.
+        else:
+            return jsonify(Error="Neither email nor phone submitted.")
 
         return jsonify(addResult)
 

@@ -1,6 +1,8 @@
 from flask import jsonify
 from dao.login import LoginDAO
 
+CREATENEWUSERKEYS = ['uname', 'email', 'password', 'first_name', 'last_name']
+LOGINKEYS = ['email', 'password']
 
 class LoginHandler:
 
@@ -21,17 +23,21 @@ class LoginHandler:
 
 
         # Currently checks if password is password
-    def attemptUserLogin(self, email, password):
+    def attemptUserLogin(self, json):
         # When ready to implement, uncomment this line.
         # userPassword = self._getUserLoginInfo(email)
+
+        for key in LOGINKEYS:
+            if key not in json:
+                return jsonify(Error='Missing credentials from submission: ' + key)
 
         userPassword = 'password'
         if (userPassword==None):
             return jsonify(Error="User email not found."), 404
         else:
             loginAttempt={}
-            loginAttempt['email']=email
-            if password==userPassword:
+            loginAttempt['email']=json['email']
+            if json['password']==userPassword:
                 loginAttempt['login']='Success'
                 loginAttempt['uid']='5'
             else:
@@ -57,13 +63,21 @@ class LoginHandler:
 
 
 # Todo Move some of this logic into sql in DAO
-    def createNewUser(self, credentials):
+    def createNewUser(self, json):
         # When ready, ucmooment these lines
         #dao = LoginDAO()
         #user = dao.getUserByEmail(credentials['email'])
 
 
-        #default to valid new user
+
+        credentials = {}
+        for key in CREATENEWUSERKEYS:
+            if key not in json:
+                return jsonify(Error='Missing credentials from submission: ' + key)
+            else:
+                credentials[key] = json[key]
+
+        # default to valid new user
         user = []
         if user:
             return jsonify(Error="User email already exists"), 300  # Don't know codes yet
@@ -71,14 +85,14 @@ class LoginHandler:
             uname = credentials['uname']
             email = credentials['email']
             password = credentials['password']
-            fname = credentials['fname']
-            lname = credentials['lname']
+            first_name = credentials['first_name']
+            last_name = credentials['last_name']
 
            #Default value for testing
             response={}
             response['uid']=69
            # When ready, ucomment this line
            # uid = dao.insertNewUser(uname=uname, email=email,
-           #                          password=password, fname=fname,
-           #                          lname=lname)
+           #                          password=password, fname=first_name,
+           #                          lname=last_name)
             return jsonify(response)

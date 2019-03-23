@@ -15,11 +15,6 @@ app = Flask(__name__)
 # Apply CORS to this app
 CORS(app)
 
-# Iterator keys for verifying needed keys
-CREATENEWUSERKEYS =['uname', 'email', 'password', 'first_name', 'last_name']
-LOGINKEYS = ['email', 'password']
-ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
-
 
 @app.route('/')
 def greeting():
@@ -30,13 +25,7 @@ def greeting():
 @app.route('/user/register', methods=['POST'])
 def createNewUser():
     if request.method == 'POST':
-        credentials = {}
-        for key in CREATENEWUSERKEYS:
-            if key not in request.json:
-                return jsonify(Error='Missing credentials from submission: '+ key)
-            else:
-                credentials[key] = request.json[key]
-        return LoginHandler().createNewUser(credentials=credentials)
+        return LoginHandler().createNewUser(json=request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -45,12 +34,7 @@ def createNewUser():
 @app.route('/user/login', methods=['POST'])
 def attemptLogin():
     if request.method == 'POST':
-        for key in LOGINKEYS:
-            if key not in request.json:
-                return jsonify(Error='Missing credentials from submission: ' + key)
-        return LoginHandler().attemptUserLogin(
-            email=request.json['email'],
-            password=request.json['password'])
+        return LoginHandler().attemptUserLogin(json=request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -87,22 +71,8 @@ def getSpecificContact(uid, cid):
 @app.route('/user/<int:uid>/add-contact', methods=['POST'])
 def addContact(uid):
     if request.method == 'POST':
-        for key in ADDCONTACTNAMEKEYS:
-            if key not in request.json:
-                return jsonify(Error='Missing credentials from submission: ' + key)
-        if request.json.get('email'):
-            return UserHandler().addContact(uid=uid,
-                                            fname=request.json['fname'],
-                                            lname=request.json['lname'],
-                                            email=request.json['email'])
-        elif request.json.get('phone'):
-            return UserHandler().addContact(uid=uid,
-                                            fname=request.json['fname'],
-                                            lname=request.json['lname'],
-                                            phone=request.json['phone'])
-        else:
-            return jsonify(Error='Missing credentials from submission; '
-                                 'Please submit either an email or phone number.')
+        return UserHandler().addContact(uid=uid,
+                                        json=request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -128,17 +98,18 @@ def getAllUsers():
 
 # Get info on a specific user.
 @app.route('/dashboard/users/<int:uid>', methods=['GET'])
-def getSpecificUser():
+def getSpecificUser(uid):
     if request.method == 'GET':
-        return UserHandler().getSpecificUser()  #TODO Implement Handler and verification.
+        return UserHandler().getSpecificUser(uid=uid)  #TODO Implement Handler and verification.
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 # Get the contacts of a specific user.
 @app.route('/dashboard/users/<int:uid>/contacts', methods=['GET'])
-def getSpecificUserContacts():
+def getSpecificUserContacts(uid):
     if request.method == 'GET':
-        return UserHandler().getSpecificUserContacts()  #TODO Implement Handler and verification.
+        return UserHandler().getSpecificUserContacts(uid=uid)  #TODO Implement Handler and verification.
     else:
         return jsonify(Error="Method not allowed."), 405
 
