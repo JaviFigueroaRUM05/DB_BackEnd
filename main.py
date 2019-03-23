@@ -99,97 +99,83 @@ def getSpecificUserContacts(uid):
 
 # ------------------------- Group Routes ----------------------------------------
 
-# tested- see all groups available and add a group
-@app.route('/api/chat-groups/groups', methods=['POST', 'GET'])
-def getAllChatGroups():
-    if request.method == 'POST':
-        json = request.get_json()
-        try:
-            g_info           = {}
-            g_info['gname']  = json['gname']
-            g_info['gphoto'] = json['gphoto']
-        except:
-            return jsonify(Error="Unexpected attribute in POST request."), 405
-        return Chat_GroupsHandler().createNewGroup(g_info=g_info)
+# method to get the groups a user belongs to
+@app.route('/groups', methods=['GET'])
+def getChatGroupsForUser(id):
+    if request.method == 'GET': return jsonify(Output="GET request received")
+    else:                       return jsonify(Error="Method not allowed."), 405
 
-    if request.method == 'GET':
-        return Chat_GroupsHandler().getAllGroups()
-    
-    else:
-        return jsonify(Error="Method not allowed."), 405
+# method to get specific chat group a user belongs to
+@app.route('/groups/<int:gid>', methods=['GET'])
+def getSpecificGroup(gid):
+    if request.method == 'GET': return jsonify(Output="GET request received")
+    else:                       return jsonify(Error="Method not allowed."), 405
 
+# create new chat group
+@app.route('/group/create', methods=['POST'])
+def createGroup():
+    if request.method == 'POST': return jsonify(Output="POST request received")
+    else:                        return jsonify(Error="Method not allowed."), 405
 
-# tested - method to get the groups a user belongs to
-@app.route('/api/chat-groups/groups/<int:id>', methods=['GET','DELETE'])
-def getChatGroupsByUser(id):
-    if request.method == 'GET':
-        return Chat_GroupsHandler().getAllGroupsByUser(id)
-    if request.method == 'DELETE':
-        return Chat_GroupsHandler().deleteGroup(id)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+# add participant to specific chat group
+@app.route('/groups/<int:gid>/add-participant', methods=['POST'])
+def addParticipantsToGroup(gid):
+    if request.method == 'POST': return jsonify(Output="POST request received")
+    else:                        return jsonify(Error="Method not allowed."), 405
 
+# delete participants from a specific group
+@app.route('/groups/<int:gid>/delete-participants', methods=['DELETE'])
+def deleteparticipantsFromGroup(gid):
+    if request.method == 'DELETE': return jsonify(Output="DELETE request received")
+    else:                          return jsonify(Error="Method not allowed."), 405
 
-# tested - method to get the users of a certain group
-@app.route('/api/chat-groups/users/<int:gid>', methods=['GET'])
-def getUsersInGroup(gid):
-    if request.method == 'GET':
-        return Chat_GroupsHandler().getAllUsersByGroup(gid)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+# delete group (only for admins)
+@app.route('/groups/<int:gid>/delete-group', methods=['DELETE'])
+def deleteGroup(gid):
+    if request.method == 'DELETE': return jsonify(Output="DELETE request received")
+    else:                          return jsonify(Error="Method not allowed."), 405
 
+# authors a post to the specified group
+@app.route('/groups/<int:gid>/create-post', methods=['POST'])
+def createPost(gid):
+    if request.method == 'POST': return jsonify(Output="POST request received")
+    else:                        return jsonify(Error="Method not allowed."), 405
 
-# tested
-@app.route('/api/chat-groups/users/<int:gid>/<int:uid>', methods=['POST', 'DELETE'])
-def modUsersInGroup(gid, uid):
-    if request.method == 'POST':
-        json = request.get_json()
-        try:
-            credentials             = {}
-            credentials['uname']    = json['uname']
-            credentials['email']    = json['email']
-            credentials['password'] = json['password']
-            credentials['fname']    = json['fname']
-            credentials['lname']    = json['lname']
-        except:
-            return jsonify(Error="Unexpected attribute in POST request."), 405
-        return Chat_GroupsHandler().addUserToGroup(credentials)
+# get all posts of a specified group
+@app.route('/groups/<int:gid>/posts', methods=['GET'])
+def getAllPostOfAGroup(gid):
+    if request.method == 'GET': return jsonify(Output="GET request received")
+    else:                       return jsonify(Error="Method not allowed."), 405
 
-    elif request.method == 'DELETE':
-        return Chat_GroupsHandler().removeUserFromGroup(gid, uid)
-    
-    else:
-        return jsonify(Error="Method not allowed."), 405
+# get specific post from group
+@app.route('/groups/<int:gid>/posts/<int:pid>', methods=['GET'])
+def getSpecificPost(gid, pid):
+    if request.method == 'GET': return jsonify(Output="GET request received")
+    else:                       return jsonify(Error="Method not allowed."), 405
 
-# ---------------------------- Post Routes --------------------------------------------------
+# reply to a specific group
+@app.route('/groups/<int:gid>/reply', methods=['POST'])
+def replyToPost(gid):
+    if request.method == 'POST': return jsonify(Output="POST request received")
+    else:                        return jsonify(Error="Method not allowed."), 405
 
+# see all groups available
+@app.route('/dashboard/groups', methods=['GET'])
+def dash_GetAllChatGroups():
+    if request.method == 'GET': return jsonify(Output="GET request received")
+    else:                       return jsonify(Error="Method not allowed."), 405
 
-@app.route('/api/posts/group/<int:id>', methods=['POST', 'GET'])
-def getGroupPosts(id):
-    if request.method == 'POST':
-        json = request.get_json()
-        try:
-            p_info              = {}
-            p_info['post_date'] = json['post_date']
-            p_info['media']     = json['media']
-            p_info['message']   = json['message']
-        except:
-            return jsonify(Error="Unexpected attribute in POST request."), 405
-        return PostsHandler().createNewPost(p_info=p_info)
+# get specific group info
+@app.route('/dashboard/groups/<int:gid>', methods=['GET'])
+def dash_getSpecificGroup():
+    if request.method == 'GET': return jsonify(Output="GET request received")
+    else:                        return jsonify(Error="Method not allowed."), 405
 
-    elif request.method == 'GET':
-        return PostsHandler().getPostsByGroup(id)
-
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-
-@app.route('/api/posts/user/<int:id>', methods=['GET'])
-def getUserPosts(id):
-    if request.method == 'GET':
-        return PostsHandler().getPostsByUser(id)
-    else:
-        return jsonify(Error="Method not allowed."), 405
+# get all posts from a specific group
+@app.route('/dashboard/groups/<int:gid>/posts', methods=['GET'])
+def dash_getPostsFromGroup():
+    if request.method == 'GET': return jsonify(Output="GET request received")
+    else:                        return jsonify(Error="Method not allowed."), 405
 
 #------------------------------ Interactions -----------------------------------
 
