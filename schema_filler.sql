@@ -1,9 +1,9 @@
 -- Fill in test data for schema
 --Persons
-insert into person(first_name, last_name, email, phone) VALUES( 'Brian' , 'Rodriguez', 'brianrodrig@gmail.com', '7879067012');
-insert into person(first_name, last_name, email, phone) VALUES( 'Sofia' , 'Saavedra', 'sofia.saavedra@gmail.com', '7876666969');
-insert into person(first_name, last_name, email, phone) VALUES( 'Javier' , 'Figueroa', 'javier.figueroa29@upr.edu', '7879637512');
-insert into person(first_name, last_name, email, phone) VALUES( 'Manuel' , 'Rodriguez', 'manuel.rodriguez@gmail.com', '9395874632');
+--insert into person(first_name, last_name, email, phone) VALUES( 'Brian' , 'Rodriguez', 'brianrodrig@gmail.com', '7879067012');
+--insert into person(first_name, last_name, email, phone) VALUES( 'Sofia' , 'Saavedra', 'sofia.saavedra@gmail.com', '7876666969');
+--insert into person(first_name, last_name, email, phone) VALUES( 'Javier' , 'Figueroa', 'javier.figueroa29@upr.edu', '7879637512');
+--insert into person(first_name, last_name, email, phone) VALUES( 'Manuel' , 'Rodriguez', 'manuel.rodriguez@gmail.com', '9395874632');
 insert into person(first_name, last_name, email, phone) VALUES( 'Michael' , 'Jackson', 'ayuwoki@gmail.com', '8459638521');
 insert into person(first_name, last_name, email, phone) VALUES( 'Michael' , 'Buble', 'mbuble@yahoo.com', '7974521683');
 insert into person(first_name, last_name, email, phone) VALUES( 'Eddie' , 'VanHalen', 'hotforteacher@gmail.com', '4512222222');
@@ -12,25 +12,25 @@ insert into person(first_name, last_name, email, phone) VALUES( 'Leonard' , 'Nee
 insert into person(first_name, last_name, email, phone) VALUES( 'Tom' , 'Frommyspace', 'tom@myspace.com', '9394561248');
 
 --Users
-insert into users(pid, uname, password) VALUES(
-    (select pid from person where email='brianrodrig@gmail.com'),'TheParodict','admin');
-insert into users(pid, uname, password) VALUES(
-    (select pid from person where email='sofia.saavedra@gmail.com'),'Hydrogon','admin');
-insert into users(pid, uname, password) VALUES(
-    (select pid from person where email='javier.figueroa29@upr.edu'),'Javi','admin');
-insert into users(pid, uname, password) VALUES(
-    (select pid from person where email='manuel.rodriguez@gmail.com'),'ManuelDB','sinsabores');
-insert into users(pid, uname, password) VALUES(
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
+    'TheParodict','admin','Brian' , 'Rodriguez', 'brianrodrig@gmail.com', '7879067012');
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
+    'Hydrogon','admin','Sofia' , 'Saavedra', 'sofia.saavedra@gmail.com', '7876666969');
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
+   'Javi','admin','Javier' , 'Figueroa', 'javier.figueroa29@upr.edu', '7879637512');
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
+    'ManuelDB','sinsabores','Manuel' , 'Rodriguez', 'manuel.rodriguez@gmail.com', '9395874632');
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
     (select pid from person where email='ayuwoki@gmail.com'),'SmoothCriminal','heehee');
-insert into users(pid, uname, password) VALUES(
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
     (select pid from person where email='mbuble@yahoo.com'),'MB','feelingood');
-insert into users(pid, uname, password) VALUES(
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
     (select pid from person where email='hotforteacher@gmail.com'),'EVH','eruption');
-insert into users(pid, uname, password) VALUES(
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
     (select pid from person where email='metoo@gmail.com'),'Hollywoodperv','#metoo');
-insert into users(pid, uname, password) VALUES(
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
     (select pid from person where email='spock@gmail.com'),'Vulcan','livelong&prosper');
-insert into users(pid, uname, password) VALUES(
+insert into users(uname, password, first_name, last_name, email, phone) VALUES(
     (select pid from person where email='tom@myspace.com'),'tom','screwfacebook');
 
 --Contacts (only TheParodict, Hydrogon, and Javi have contacts)

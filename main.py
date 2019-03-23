@@ -35,9 +35,16 @@ def attemptLogin():
     else:                        return jsonify(Error="Method not allowed."), 405
 
 
-# Gets User Contacts
-@app.route('/user/<int:uid>', methods=['GET'])
+# Gets User by uid
+@app.route('/user/uid=<int:uid>', methods=['GET'])
 def getUserInfo(uid):
+    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+# Gets User by uname
+@app.route('/user/uname=<uname>', methods=['GET'])
+def getUserInfo(uname):
     if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
     else:                       return jsonify(Error="Method not allowed."), 405
 
