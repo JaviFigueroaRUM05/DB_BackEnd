@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from handler.contacts import ContactsHandler
+from handler.user import UserHandler
 from handler.login import LoginHandler
 from handler.chat_groups import Chat_GroupsHandler
 from handler.posts import PostsHandler
@@ -16,9 +16,9 @@ app = Flask(__name__)
 CORS(app)
 
 # Iterator keys for verifying needed keys
-CREATENEWUSERKEYS =['uname', 'email', 'password', 'fname', 'lname']
+CREATENEWUSERKEYS =['uname', 'email', 'password', 'first_name', 'last_name']
 LOGINKEYS = ['email', 'password']
-ADDCONTACTNAMEKEYS = ['fname', 'lname']
+ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
 
 
 @app.route('/')
@@ -26,24 +26,8 @@ def greeting():
     return 'Hello, this is the parts DB App! Sofia is currently trying to make things work in group related routes.'
 
 
-# Uses json data to login user (email only)
-# Tested and Hardcoded
-@app.route('/api/login', methods=['POST'])
-def attemptLogin():
-    if request.method == 'POST':
-        for key in LOGINKEYS:
-            if key not in request.json:
-                return jsonify(Error='Missing credentials from submission: ' + key)
-        return LoginHandler().attemptUserLogin(
-            email=request.json['email'],
-            password=request.json['password'])
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-
 # Registers a new user using json data.
-# Tested and hardcoded
-@app.route('/api/register-user', methods=['POST'])
+@app.route('/user/register', methods=['POST'])
 def createNewUser():
     if request.method == 'POST':
         credentials = {}
@@ -57,45 +41,106 @@ def createNewUser():
         return jsonify(Error="Method not allowed."), 405
 
 
-# Gets user contacts, adds or deletes user contacts using json data
-# Tested and hardcoded
-# TODO Verify user is uid user
-@app.route('/api/contacts/<int:uid>', methods=['GET','POST'])
+# Uses json data to login user (email only)
+@app.route('/user/login', methods=['POST'])
+def attemptLogin():
+    if request.method == 'POST':
+        for key in LOGINKEYS:
+            if key not in request.json:
+                return jsonify(Error='Missing credentials from submission: ' + key)
+        return LoginHandler().attemptUserLogin(
+            email=request.json['email'],
+            password=request.json['password'])
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# Gets User Contacts
+@app.route('/user/<int:uid>', methods=['GET'])
+def getUserInfo(uid):
+    if request.method == 'GET':
+        return UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# Gets User Contacts
+@app.route('/user/<int:uid>/contacts', methods=['GET'])
 def getAllContacts(uid):
     if request.method == 'GET':
-        return ContactsHandler().getAllContacts(uid=uid)
+        return UserHandler().getAllContacts(uid=uid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# get a specific contact from a user's contact list.
+@app.route('/user/<int:uid>/contacts/<int:cid>', methods=['GET'])
+def getSpecificContact(uid, cid):
+    if request.method == 'GET':
+        return UserHandler().getSpecificContact(uid=uid,
+                                                cid=cid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# Adds contact to user's contact list.
+@app.route('/user/<int:uid>/add-contact', methods=['POST'])
+def addContact(uid):
     if request.method == 'POST':
         for key in ADDCONTACTNAMEKEYS:
             if key not in request.json:
                 return jsonify(Error='Missing credentials from submission: ' + key)
         if request.json.get('email'):
-            return ContactsHandler().addContact(uid=uid,
-                                                fname=request.json['fname'],
-                                                lname=request.json['lname'],
-                                                email=request.json['email'])
+            return UserHandler().addContact(uid=uid,
+                                            fname=request.json['fname'],
+                                            lname=request.json['lname'],
+                                            email=request.json['email'])
         elif request.json.get('phone'):
-            return ContactsHandler().addContact(uid=uid,
-                                                fname=request.json['fname'],
-                                                lname=request.json['lname'],
-                                                phone=request.json['phone'])
+            return UserHandler().addContact(uid=uid,
+                                            fname=request.json['fname'],
+                                            lname=request.json['lname'],
+                                            phone=request.json['phone'])
         else:
             return jsonify(Error='Missing credentials from submission; '
                                  'Please submit either an email or phone number.')
     else:
         return jsonify(Error="Method not allowed."), 405
 
-# TODO Verify user is uid user
-@app.route('/api/contacts/<int:uid>/<int:cid>', methods=['GET','DELETE'])
+
+# Delete a contact from a user's contact list.
+@app.route('/user/<int:uid>/delete-contact/<int:cid>', methods=['DELETE'])
 def deleteContact(uid, cid):
     if request.method == 'DELETE':
-        return ContactsHandler().removeContact(uid=uid,
-                                               cid=cid)
-    if request.method == 'GET':
-        return ContactsHandler().getSpecificContact(uid=uid,
-                                                    cid=cid)
+        return UserHandler().removeContact(uid=uid,
+                                           cid=cid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+# Get all users in the system.
+@app.route('/dashboard/users', methods=['GET'])
+def getAllUsers():
+    if request.method == 'GET':
+        return UserHandler().getAllUsers()  #TODO Implement Handler and verification.
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# Get info on a specific user.
+@app.route('/dashboard/users/<int:uid>', methods=['GET'])
+def getSpecificUser():
+    if request.method == 'GET':
+        return UserHandler().getSpecificUser()  #TODO Implement Handler and verification.
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+# Get the contacts of a specific user.
+@app.route('/dashboard/users/<int:uid>/contacts', methods=['GET'])
+def getSpecificUserContacts():
+    if request.method == 'GET':
+        return UserHandler().getSpecificUserContacts()  #TODO Implement Handler and verification.
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 # ------------------------- Group Routes ----------------------------------------
 

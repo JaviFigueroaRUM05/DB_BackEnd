@@ -2,7 +2,7 @@ from flask import jsonify
 from dao.contacts import ContactsDAO
 
 
-class ContactsHandler:
+class UserHandler:
 
     def getAllContacts(self, uid):
         # dao = ContactsDAO()
