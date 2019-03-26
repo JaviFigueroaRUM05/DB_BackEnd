@@ -37,14 +37,14 @@ def attemptLogin():
 
 # Gets User by uid
 @app.route('/user/uid=<int:uid>', methods=['GET'])
-def getUserInfo(uid):
+def getUserInfoByID(uid):
     if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Gets User by uname
 @app.route('/user/uname=<uname>', methods=['GET'])
-def getUserInfo(uname):
+def getUserInfoByUname(uname):
     if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
     else:                       return jsonify(Error="Method not allowed."), 405
 
