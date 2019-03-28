@@ -17,6 +17,15 @@ class UserHandler:
         response['phone'] = user_tuple[5]
         return response
 
+    # Do I need json for dashboard?
+    def getAllUsersInfo(self):
+        dao = UsersDAO()
+        users = dao.getAllUsersInfo()
+        UserList = []
+        for user in users:
+            UserList.append(self._buildUserResponse(user_tuple=user))
+        response = {'contacts': UserList}
+        return jsonify(response)
 
     def getUserInfoByID(self, uid):
         dao = UsersDAO()
@@ -41,7 +50,7 @@ class UserHandler:
         contacts = dao.getUserContacts(uid=uid)
         contactList = []
         for contact in contacts:
-            contactList.append(self._buildUserResponse(contact))
+            contactList.append(self._buildUserResponse(user_tuple=contact))
         response = {'contacts': contactList}
         return jsonify(response)
 

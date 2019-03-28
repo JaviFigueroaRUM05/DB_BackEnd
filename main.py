@@ -80,7 +80,7 @@ def deleteContact(uid, cid):
 # Get all users in the system.
 @app.route('/dashboard/users', methods=['GET'])
 def getAllUsers():
-    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getAllUsers()  #TODO Implement Handler and verification.
+    if request.method == 'GET': return UserHandler().getAllUsersInfo()  #TODO Implement Handler and verification.
     else:                       return jsonify(Error="Method not allowed."), 405
 
 

@@ -11,6 +11,15 @@ class UsersDAO:
                                                                     pg_config['host'])
         self.conn = psycopg2._connect(connection_url)
 
+    def getAllUsersInfo(self):
+        cursor = self.conn.cursor()
+        query = "select uid, uname, first_name, last_name, email, phone " \
+                "from Users;"
+        cursor.execute(query,)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getUserInfoByID(self, uid):
         cursor = self.conn.cursor()
