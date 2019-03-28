@@ -36,33 +36,16 @@ class UserHandler:
             response = self._buildUserResponse(user_tuple=user)
         return jsonify(response)
 
-
-
-#==========================================================================================
-    def getAllContacts(self, uid):
+    def getAllContacts(self, uid, json):
         dao = ContactsDAO()
         contacts = dao.getUserContacts(uid=uid)
-        contactList = {}
-        for contactID in contacts:
-            contactList[str(contactID[0])] = self._getContactByID(contactID[0])
+        contactList = []
+        for contact in contacts:
+            contactList.append(self._buildUserResponse(contact))
+        response = {'contacts': contactList}
+        return jsonify(response)
 
-        # Hardcoded response json
-        # contactList={
-        #               'uid': uid,
-        #               "2": {
-        #                 "fname": "Manuel",
-        #                 "lname": "DB",
-        #                 "uname": "manueldb"
-        #               },
-        #               "3": {
-        #                 "fname": "Juan",
-        #                 "lname": "Dalmau",
-        #                 "uname": "testname"
-        #               }
-        #             }
-
-        return jsonify(contactList)
-
+# ==========================================================================================
     def getSpecificContact(self, uid, cid):
         dao = ContactsDAO()
         contact = dao.verifyContactById(uid=uid, cid=cid)

@@ -14,7 +14,9 @@ class ContactsDAO:
 
     def getUserContacts(self, uid):
         cursor = self.conn.cursor()
-        query = "select cid from contacts where uid= %s;"
+        query = "select uid, uname, first_name, last_name, email, phone " \
+                "from users " \
+                "where uid in (select cid from contacts where uid= %s);"
         cursor.execute(query, (uid,))
         result = []
         for row in cursor:

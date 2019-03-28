@@ -52,7 +52,7 @@ def getUserInfoByUname(uname):
 # Gets User Contacts
 @app.route('/user/<int:uid>/contacts', methods=['GET'])
 def getAllContacts(uid):
-    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getAllContacts(uid=uid)
+    if request.method == 'GET': return UserHandler().getAllContacts(uid=uid, json=request.json)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
