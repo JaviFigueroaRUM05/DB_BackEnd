@@ -24,7 +24,7 @@ def greeting():
 # Registers a new user using json data.
 @app.route('/user/register', methods=['POST'])
 def createNewUser():
-    if request.method == 'POST': return jsonify(Output="Post request recieved.") #LoginHandler().createNewUser(json=request.json)
+    if request.method == 'POST': return UserHandler().createNewUser(json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 

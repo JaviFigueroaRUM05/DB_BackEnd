@@ -1,8 +1,10 @@
 from flask import jsonify
+from psycopg2 import IntegrityError
 from dao.contacts import ContactsDAO
 from dao.users import UsersDAO
 
 ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
+CREATENEWUSERKEYS = ['uname', 'email', 'password', 'first_name', 'last_name', 'phone']
 
 
 class UserHandler:
@@ -16,6 +18,23 @@ class UserHandler:
         response['email'] = user_tuple[4]
         response['phone'] = user_tuple[5]
         return response
+
+    # How do I handle duplicates/errors?
+    def createNewUser(self, json):
+        for key in CREATENEWUSERKEYS:
+            if key not in json:
+                return jsonify(Error='Missing credentials from submission: ' + key), 400
+        dao = UsersDAO()
+        try:
+            uid = dao.insertNewUser(uname=json['uname'], email=json['email'],
+                                    password=json['password'], first_name=json['first_name'],
+                                    last_name=json['last_name'], phone=json['phone'])
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
+
+        return jsonify({'uid': uid}), 201
+
 
     # Do I need json for dashboard?
     def getAllUsersInfo(self):
