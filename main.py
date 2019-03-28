@@ -85,16 +85,18 @@ def getAllUsers():
 
 
 # Get info on a specific user.
+# This route, though seperate, is redundant with /user/uid=<int:uid>
 @app.route('/dashboard/users/<int:uid>', methods=['GET'])
 def getSpecificUser(uid):
-    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getSpecificUser(uid=uid)  #TODO Implement Handler and verification.
+    if request.method == 'GET': return UserHandler().getUserInfoByID(uid=uid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Get the contacts of a specific user.
+# This route, though seperate, is redundant with /user/<int:uid>/contacts
 @app.route('/dashboard/users/<int:uid>/contacts', methods=['GET'])
 def getSpecificUserContacts(uid):
-    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getSpecificUserContacts(uid=uid)  #TODO Implement Handler and verification.
+    if request.method == 'GET': return UserHandler().getAllContacts(uid=uid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # ------------------------- Group Routes ----------------------------------------
