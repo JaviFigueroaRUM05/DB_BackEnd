@@ -45,7 +45,7 @@ def getUserInfoByID(uid):
 # Gets User by uname
 @app.route('/user/uname=<uname>', methods=['GET'])
 def getUserInfoByUname(uname):
-    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
+    if request.method == 'GET': return UserHandler().getUserInfoByUname(uname=uname, json=request.json)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 

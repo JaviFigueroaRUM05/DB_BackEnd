@@ -20,16 +20,21 @@ class UserHandler:
 
     def getUserInfoByID(self, uid, json):
         dao = UsersDAO()
-        user = dao.getUserInfoByID(uid)
+        user = dao.getUserInfoByID(uid=uid)
         if not user:
             return jsonify(Error='User does not exist: '+ str(uid)), 404
         else:
             response = self._buildUserResponse(user_tuple=user)
         return jsonify(response)
 
-
-
-
+    def getUserInfoByUname(self, uname, json):
+        dao = UsersDAO()
+        user = dao.getUserInfoByUname(uname=uname)
+        if not user:
+            return jsonify(Error='User does not exist: ' + str(uname)), 404
+        else:
+            response = self._buildUserResponse(user_tuple=user)
+        return jsonify(response)
 
 
 

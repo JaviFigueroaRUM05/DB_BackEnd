@@ -20,4 +20,12 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
+    def getUserInfoByUname(self, uname):
+        cursor = self.conn.cursor()
+        query = "select uid, uname, first_name, last_name, email, phone " \
+                "from Users where uname= %s;"
+        cursor.execute(query, (uname,))
+        result = cursor.fetchone()
+        return result
+
 
