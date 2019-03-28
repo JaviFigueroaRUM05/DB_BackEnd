@@ -1,11 +1,39 @@
 from flask import jsonify
 from dao.contacts import ContactsDAO
+from dao.users import UsersDAO
 
 ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
 
 
 class UserHandler:
 
+    def _buildUserResponse(self, user_tuple):
+        response = {}
+        response['uid'] = user_tuple[0]
+        response['uname'] = user_tuple[1]
+        response['first_name'] = user_tuple[2]
+        response['last_name'] = user_tuple[3]
+        response['email'] = user_tuple[4]
+        response['phone'] = user_tuple[5]
+        return response
+
+
+    def getUserInfoByID(self, uid, json):
+        dao = UsersDAO()
+        user = dao.getUserInfoByID(uid)
+        if not user:
+            return jsonify(Error='User does not exist: '+ str(uid)), 404
+        else:
+            response = self._buildUserResponse(user_tuple=user)
+        return jsonify(response)
+
+
+
+
+
+
+
+#==========================================================================================
     def getAllContacts(self, uid):
         dao = ContactsDAO()
         contacts = dao.getUserContacts(uid=uid)

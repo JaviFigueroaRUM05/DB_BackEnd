@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from handler.user import UserHandler
+from handler.users import UserHandler
 from handler.login import LoginHandler
 from handler.chat_groups import Chat_GroupsHandler
 from handler.posts import PostsHandler
@@ -38,7 +38,7 @@ def attemptLogin():
 # Gets User by uid
 @app.route('/user/uid=<int:uid>', methods=['GET'])
 def getUserInfoByID(uid):
-    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getUserInfo(uid=uid) #TODO Implement Handler.
+    if request.method == 'GET': return UserHandler().getUserInfoByID(uid=uid, json=request.json)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
