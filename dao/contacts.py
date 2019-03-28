@@ -23,19 +23,17 @@ class ContactsDAO:
             result.append(row)
         return result
 
-    def getContactById(self, uid):
+    def getContactById(self, uid, cid):
         cursor = self.conn.cursor()
-        query = "select uname, fname, lname, photo from users where uid = %s;"
-        cursor.execute(query, (uid,))
+        query = "select uid, uname, first_name, last_name, email, phone " \
+                "from users " \
+                "where uid =" \
+                "(select cid from contacts where uid=%s and cid=%s);"
+        cursor.execute(query, (uid,cid,))
         result = cursor.fetchone()
         return result
 
-    def verifyContactById(self, uid, cid):
-        cursor = self.conn.cursor()
-        query = "select cid from contacts where uid = %s AND cid = %s;"
-        cursor.execute(query, (uid, cid,))
-        result = cursor.fetchone()
-        return result
+
 
 # Currently allows duplicate entries
     # Uses logic in python.

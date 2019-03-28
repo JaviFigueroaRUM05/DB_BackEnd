@@ -38,28 +38,28 @@ def attemptLogin():
 # Gets User by uid
 @app.route('/user/uid=<int:uid>', methods=['GET'])
 def getUserInfoByID(uid):
-    if request.method == 'GET': return UserHandler().getUserInfoByID(uid=uid, json=request.json)
+    if request.method == 'GET': return UserHandler().getUserInfoByID(uid=uid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Gets User by uname
 @app.route('/user/uname=<uname>', methods=['GET'])
 def getUserInfoByUname(uname):
-    if request.method == 'GET': return UserHandler().getUserInfoByUname(uname=uname, json=request.json)
+    if request.method == 'GET': return UserHandler().getUserInfoByUname(uname=uname)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Gets User Contacts
 @app.route('/user/<int:uid>/contacts', methods=['GET'])
 def getAllContacts(uid):
-    if request.method == 'GET': return UserHandler().getAllContacts(uid=uid, json=request.json)
+    if request.method == 'GET': return UserHandler().getAllContacts(uid=uid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # get a specific contact from a user's contact list.
 @app.route('/user/<int:uid>/contacts/<int:cid>', methods=['GET'])
 def getSpecificContact(uid, cid):
-    if request.method == 'GET': return jsonify(Output="GET request recieved.") # UserHandler().getSpecificContact(uid=uid, cid=cid)
+    if request.method == 'GET': return UserHandler().getSpecificContact(uid=uid, cid=cid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 

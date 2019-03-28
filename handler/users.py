@@ -18,7 +18,7 @@ class UserHandler:
         return response
 
 
-    def getUserInfoByID(self, uid, json):
+    def getUserInfoByID(self, uid):
         dao = UsersDAO()
         user = dao.getUserInfoByID(uid=uid)
         if not user:
@@ -27,7 +27,7 @@ class UserHandler:
             response = self._buildUserResponse(user_tuple=user)
         return jsonify(response)
 
-    def getUserInfoByUname(self, uname, json):
+    def getUserInfoByUname(self, uname):
         dao = UsersDAO()
         user = dao.getUserInfoByUname(uname=uname)
         if not user:
@@ -36,7 +36,7 @@ class UserHandler:
             response = self._buildUserResponse(user_tuple=user)
         return jsonify(response)
 
-    def getAllContacts(self, uid, json):
+    def getAllContacts(self, uid):
         dao = ContactsDAO()
         contacts = dao.getUserContacts(uid=uid)
         contactList = []
@@ -45,39 +45,17 @@ class UserHandler:
         response = {'contacts': contactList}
         return jsonify(response)
 
-# ==========================================================================================
     def getSpecificContact(self, uid, cid):
         dao = ContactsDAO()
-        contact = dao.verifyContactById(uid=uid, cid=cid)
+        contact = dao.getContactById(uid=uid, cid=cid)
         if not contact:
-            return jsonify(Error='contact not found')
-        result = {
-            cid: self._getContactByID(cid)
-        }
+            return jsonify(Error='User does not have this contact '
+                                 'in their contact list: ' + str(cid)), 404
+        else:
+            response = self._buildUserResponse(user_tuple=contact)
+        return jsonify(response)
 
-        # Hardcoded result
-        # result = {
-        #             'uid': uid,
-        #             'cid': cid,
-        #             "2": {
-        #                 "fname": "Manuel",
-        #                 "lname": "DB",
-        #                 "uname": "manueldb"
-        #               }}
-
-
-        return jsonify(result)
-
-    def _getContactByID(self, uid):
-        dao = ContactsDAO()
-        contact = dao.getContactById(uid=uid)
-        result = {}
-        result['uname']=contact[0]
-        result['fname']=contact[1]
-        result['lname']=contact[2]
-        if not contact:
-            return 'User Not Found'
-        return result
+# ==========================================================================================
 
     def addContact(self, uid, json):
         # TODO Verify this is functional with new tables once implemented
