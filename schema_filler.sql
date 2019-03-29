@@ -162,9 +162,10 @@ insert into tagged(postid, hid) VALUES((select postid from post where message='I
 (select hid from hashtag where hname='#pleasehelp'));
 
 --Reactions
-insert into reaction (rdate, rtype, postID) VALUES('2019-03-17 18:43:00', 'L',
-    (select postid from post where message='Im drowning in my classes #pleasehelp'));
+insert into reaction (rdate, rtype, postID, uid) VALUES('2019-03-17 18:43:00', 'L',
+    (select postid from post where message='Im drowning in my classes #pleasehelp'),
+    (select uid from users where uname='Javi'));
 
 --Reacts
-insert into reacts(uid, rid) VALUES((select uid from users where uname='Javi'),
-    (select rid from reaction where rdate='2019-03-17 18:43:00'));
+--insert into reacts(uid, rid) VALUES((select uid from users where uname='Javi'),
+--    (select rid from reaction where rdate='2019-03-17 18:43:00'));
