@@ -7,6 +7,7 @@ ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
 CREATENEWUSERKEYS = ['uname', 'email', 'password', 'first_name', 'last_name', 'phone']
 LOGINKEYS = ['email', 'password']
 
+
 class UserHandler:
 
     def _buildUserResponse(self, user_tuple):
@@ -19,7 +20,6 @@ class UserHandler:
         response['phone'] = user_tuple[5]
         return response
 
-    # How do I handle duplicates/errors?
     def createNewUser(self, json):
         for key in CREATENEWUSERKEYS:
             if key not in json:
@@ -93,7 +93,6 @@ class UserHandler:
             response = self._buildUserResponse(user_tuple=contact)
         return jsonify(response)
 
-
     def addContact(self, uid, json):
         for key in ADDCONTACTNAMEKEYS:
             if key not in json:
@@ -116,15 +115,7 @@ class UserHandler:
 
         return jsonify({"uid": addResult[0], "cid": addResult[1]}), 201
 
-    # ==========================================================================================
-
     def removeContact(self, uid, cid):
-        # Verify user/cid
-        # delete entry if existant
         dao = ContactsDAO()
         removalResult = dao.removeContactById(uid=uid, cid=cid)
-
-        # Hardcoded REsponse Json
-        # removalResult = {"entriesDeleted": 1}
-
-        return jsonify(removalResult)
+        return jsonify(removalResult), 202

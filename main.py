@@ -72,7 +72,7 @@ def addContact(uid):
 # Delete a contact from a user's contact list.
 @app.route('/user/<int:uid>/delete-contact/<int:cid>', methods=['DELETE'])
 def deleteContact(uid, cid):
-    if request.method == 'DELETE': return jsonify(Output="DELETE request recieved.") # UserHandler().removeContact(uid=uid, cid=cid)
+    if request.method == 'DELETE': return UserHandler().removeContact(uid=uid, cid=cid)
     else:                          return jsonify(Error="Method not allowed."), 405
 
 
