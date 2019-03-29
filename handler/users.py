@@ -46,7 +46,6 @@ class UserHandler:
         else:
             return jsonify({"uid": userID[0]}), 202
 
-
     # Do I need json for dashboard?
     def getAllUsersInfo(self):
         dao = UsersDAO()
@@ -94,28 +93,30 @@ class UserHandler:
             response = self._buildUserResponse(user_tuple=contact)
         return jsonify(response)
 
-# ==========================================================================================
 
     def addContact(self, uid, json):
-        # TODO Verify this is functional with new tables once implemented
         for key in ADDCONTACTNAMEKEYS:
             if key not in json:
-                return jsonify(Error='Missing credentials from submission: ' + key)
+                return jsonify(Error='Missing credentials from submission: ' + key), 400
 
         dao = ContactsDAO()
 
-        if json.get('email'):
-            addResult = dao.addContactByEmail(uid=uid, fname=json['first_name'],
-                                              lname=json['lname'], email=json['email'])
-        elif json.get('phone'):
-            addResult = dao.addContactByPhone(uid=uid, fname=json["fname"],
-                                              lname=json["lname"], phone=json["phone"])
-        if not addResult:
-            return jsonify(Error='The contact you are trying to '
-                                 'add does not exist.')
+        try:
+            if json.get('email'):
+                addResult = dao.addContactByEmail(uid=uid, first_name=json['first_name'],
+                                                  last_name=json['last_name'], email=json['email'])
+            elif json.get('phone'):
+                addResult = dao.addContactByPhone(uid=uid, first_name=json["first_name"],
+                                                  last_name=json["last_name"], phone=json["phone"])
+            else:
+                return jsonify(Error='Neither email nor phone were provided.'), 400
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
 
-        return jsonify(addResult)
+        return jsonify({"uid": addResult[0], "cid": addResult[1]}), 201
 
+    # ==========================================================================================
 
     def removeContact(self, uid, cid):
         # Verify user/cid

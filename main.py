@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 from handler.users import UserHandler
-from handler.login import LoginHandler
 from handler.chat_groups import Chat_GroupsHandler
 from handler.posts import PostsHandler
 from handler.interactions import InteractionHandler
@@ -66,7 +65,7 @@ def getSpecificContact(uid, cid):
 # Adds contact to user's contact list.
 @app.route('/user/<int:uid>/add-contact', methods=['POST'])
 def addContact(uid):
-    if request.method == 'POST': return jsonify(Output="POST request recieved.") # UserHandler().addContact(uid=uid, json=request.json)
+    if request.method == 'POST': return UserHandler().addContact(uid=uid, json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 
