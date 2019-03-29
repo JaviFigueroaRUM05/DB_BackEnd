@@ -37,6 +37,13 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
+    def getIdByLogin(self, email, password):
+        cursor = self.conn.cursor()
+        query = "select uid from users where email = %s AND password = %s;"
+        cursor.execute(query, (email,password))
+        result = cursor.fetchone()
+        return result
+
     def insertNewUser(self, uname, email, password, first_name, last_name, phone):
         cursor = self.conn.cursor()
         query = "insert into users(uname, email, password, first_name," \

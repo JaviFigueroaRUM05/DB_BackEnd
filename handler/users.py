@@ -5,7 +5,7 @@ from dao.users import UsersDAO
 
 ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
 CREATENEWUSERKEYS = ['uname', 'email', 'password', 'first_name', 'last_name', 'phone']
-
+LOGINKEYS = ['email', 'password']
 
 class UserHandler:
 
@@ -34,6 +34,17 @@ class UserHandler:
             return jsonify(Error=str(e))
 
         return jsonify({'uid': uid}), 201
+
+    def attemptUserLogin(self, json):
+        for key in LOGINKEYS:
+            if key not in json:
+                return jsonify(Error='Missing credentials from submission: ' + key)
+        dao = UsersDAO()
+        userID = dao.getIdByLogin(email=json['email'], password=json['password'])
+        if userID is None:
+            return jsonify(Error="Invalid email or password."), 400
+        else:
+            return jsonify({"uid": userID[0]}), 202
 
 
     # Do I need json for dashboard?

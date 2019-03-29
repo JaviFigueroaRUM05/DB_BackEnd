@@ -31,7 +31,7 @@ def createNewUser():
 # Uses json data to login user (email only)
 @app.route('/user/login', methods=['POST'])
 def attemptLogin():
-    if request.method == 'POST': return jsonify(Output="Post request recieved.") # LoginHandler().attemptUserLogin(json=request.json)
+    if request.method == 'POST': return UserHandler().attemptUserLogin(json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 
