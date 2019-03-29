@@ -12,34 +12,41 @@ class Chat_GroupsDAO:
 
     def getAllGroups(self):
         cursor = self.conn.cursor()
-        query = "select * from chat_groups;"
+        query = "select * from cgroup;"
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def getGroupById(self, gid):
-        cursor = self.conn.cursor()
-        query = "select * from chat_groups where gid = %s;"
-        cursor.execute(query, (gid,))
-        result = cursor.fetchone()
-        return result
-
     # get all groups that a user belongs to
-    def getGroupsByUser(self, uid):
+    def getGroupsUserBelongsTo(self, uid):
         cursor = self.conn.cursor()
-        query = "select * from participants where participant_id = %s;"
+        query = "select gid, gName, gPhoto, isadmin " \
+                "from participants natural inner join cgroup " \
+                "where uid = %s;"
         cursor.execute(query, (uid,))
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    # get all users on a group
-    def getUsersByGroup(self, gid):
+    #get metadata of a group
+    def getGroupById(self, gid):
         cursor = self.conn.cursor()
-        query = "select participant_id, participant_name from participants where group_id = %s;"
+        query = "select * " \
+                "from cgroup " \
+                "where gid = %s;"
+        cursor.execute(query, (gid,))
+        result = cursor.fetchone()
+        return result
+
+    # get all users on a group
+    def getUsersInAGroup(self, gid):
+        cursor = self.conn.cursor()
+        query = "select uid, isadmin, uname, first_name, last_name, email, phone " \
+                "from participants natural inner join users " \
+                "where gid = %s;"
         cursor.execute(query, (gid,))
         result = []
         for row in cursor:

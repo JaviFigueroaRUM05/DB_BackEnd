@@ -99,16 +99,18 @@ def getSpecificUserContacts(uid):
 
 # ------------------------- Group Routes ----------------------------------------
 
+#tested - works
 # method to get the groups a user belongs to
+# Remember uid is passed through json
 @app.route('/groups', methods=['GET'])
-def getChatGroupsForUser(id):
-    if request.method == 'GET': return jsonify(Output="GET request received")
+def getChatGroupsForUser():
+    if request.method == 'GET': return Chat_GroupsHandler().getGroupsUserBelongsTo(json=request.json)
     else:                       return jsonify(Error="Method not allowed."), 405
 
-# method to get specific chat group a user belongs to
+# method to get metadata of a group a user belongs to
 @app.route('/groups/<int:gid>', methods=['GET'])
 def getSpecificGroup(gid):
-    if request.method == 'GET': return jsonify(Output="GET request received")
+    if request.method == 'GET': return Chat_GroupsHandler().getGroupById(gid=gid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # create new chat group
@@ -162,7 +164,7 @@ def replyToPost(gid):
 # see all groups available
 @app.route('/dashboard/groups', methods=['GET'])
 def dash_GetAllChatGroups():
-    if request.method == 'GET': return jsonify(Output="GET request received")
+    if request.method == 'GET': return Chat_GroupsHandler().getAllGroups()
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # get specific group info

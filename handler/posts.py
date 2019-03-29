@@ -3,62 +3,28 @@ from dao.posts import PostsDAO
 
 class PostsHandler:
 
-    posts = [{
-        'pid' : 1,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'hello friend'
-    },
-    {
-        'pid' : 2,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'hello'
-    },
-    {
-        'pid' : 3,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'what you doing?'
-    },
-    {
-        'pid' : 4,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'studying... :('
-    }
-    ]
-
+    posts_cont = ["postid","pdate","message","mediatype", "media","uid","gid"]
 
     def build_post_dict(self, row):
         result = {}
-        result['pid'] = row[0]
-        result['post_date'] = row[1]
-        result['media'] = row[2]
-        result['message'] = row[3]
-        result['gid'] = row[4]
-        result['reply_to_post'] = row[5]
+        result['postid'] = row[0]
+        result['pdate'] = row[1]
+        result['message'] = row[2]
+        result['mediatype'] = row[3]
+        result['media'] = row[4]
+        result['uid'] = row[5]
+        result['gid'] = row[6]
         return result
 
-    def build_posts_attributes(self, pid, post_date, media, message, gid, reply_to_post):
-        result = {}
-        result['pid'] = pid
-        result['post_date'] = post_date
-        result['media'] = media
-        result['message'] = message
-        result['gid'] = gid
-        result['reply_to_post'] = reply_to_post
-        return result
 
     def getAllPosts(self):
-        # dao = PostsDAO()
-        # posts_list = dao.getAllPosts()
-        # result_list = []
-        # for row in posts_list:
-        #     result = self.build_post_dict(row)
-        #     result_list.append(result)
-        # return jsonify(Posts=result_list)
-        return jsonify(self.posts)
+        dao = PostsDAO()
+        posts_list = dao.getAllPosts()
+        result_list = []
+        for row in posts_list:
+            result = self.build_post_dict(row)
+            result_list.append(result)
+        return jsonify(Posts=result_list)
 
     def createNewPost(self, p_info):
         # dao = PostsDAO()

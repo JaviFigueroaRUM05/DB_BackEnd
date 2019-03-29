@@ -12,13 +12,14 @@ class PostsDAO:
 
     def getAllPosts(self):
         cursor = self.conn.cursor()
-        query = "select * from Post;"
+        query = "select * from post;"
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
+    # get all posts of a specified group
     def getPostsByGroup(self, gid):
         cursor = self.conn.cursor()
         query = "select * from Post where gid = %s;"

@@ -3,127 +3,74 @@ from dao.chat_groups import Chat_GroupsDAO
 
 class Chat_GroupsHandler:
 
-    groups = [{
-        'gid' : 1,
-        'gname': 'los de la esquina',
-        'gphoto' : 'default'
-    },
-    {
-        'gid' : 2,
-        'gname': 'el gara',
-        'gphoto' : 'default',
-    },
-    {
-        'gid' : 3,
-        'gname': 'the cuchifrits',
-        'gphoto' : 'default',
-    },
-    {
-        'gid' : 4,
-        'gname': 'DATA',
-        'gphoto' : 'default',
-    }
-    ]
-
-    users = [{
-        'uid' : 1,
-        'uname' : 'Pedr',
-        'email' : 'p@upr.edu',
-        'password' : 'pop',
-        'fname' : 'pedro',
-        'lname' : 'rodriguez'
-    },
-    {
-        'uid' : 2,
-        'uname' : 'user2',
-        'email' : 'u2@upr.edu',
-        'password' : 'user',
-        'fname' : 'Juan',
-        'lname' : 'rodriguez'
-    },
-    {
-        'uid' : 3,
-        'uname' : 'user3',
-        'email' : 'u3@upr.edu',
-        'password' : 'user',
-        'fname' : 'Sancho',
-        'lname' : 'Panza'
-    },
-    {
-        'uid' : 4,
-        'uname' : 'user4',
-        'email' : 'u4@upr.edu',
-        'password' : 'user',
-        'fname' : 'Flora',
-        'lname' : 'Morales'
-    }]
-
     def build_chat_groups_dict(self, row):
         result = {}
-        result['gid'] = row[0]
-        result['gname'] = row[1]
-        result['gphoto'] = row[2]
+        result['GID'] = row[0]
+        result['gName'] = row[1]
+        result['gPhoto'] = row[2]
         return result
 
-    def build_chat_group_attributes(self, gid, gname, gphoto):
+    def build_chat_groups_participants_dict(self, row):
         result = {}
-        result['gid'] = gid
-        result['gname'] = gname
-        result['gphoto'] = gphoto
+        result['uid'] = row[0]
+        result['isadmin'] = row[1]
+        result['uname'] = row[2]
+        result['first_name'] = row[3]
+        result['last_name'] = row[4]
+        result['email'] = row[5]
+        result['phone'] = row[6]
         return result
 
+    # tested - works
     def getAllGroups(self):
-        # dao = Chat_GroupsDAO()
-        # groups_list = dao.getAllGroups()
-        # result_list = []
-        # for row in groups_list:
-        #     result = self.build_chat_groups_dict(row)
-        #     result_list.append(result)
-        # return jsonify(Chat_groups=result_list)
-        return jsonify(self.groups)
+        dao = Chat_GroupsDAO()
+        groups_list = dao.getAllGroups()
+        result_list = []
+        for row in groups_list:
+            result = self.build_chat_groups_dict(row)
+            result_list.append(result)
+        return jsonify(Chat_groups=result_list)
 
-    def createNewGroup(self, g_info):
-        # dao = Chat_GroupsDAO()
-        # gname = g_info['gname']
-        # gphoto = g_info['gphoto']
-        # gadmin = g_info['gadmin']
-        #
-        # gid = dao.createNewGroup(gname=gname, gphoto=gphoto, gadmin=gadmin)
-        # g_info['gid']=gid
-        # return jsonify(g_info)
-        g_info['gid']=5
-        self.groups.append(g_info)
-        return jsonify(g_info)
+    #tested - working
+    # get groups a user belongs to
+    def getGroupsUserBelongsTo(self, json):
+        if not json.get('uid'):
+            return jsonify(Error="No user logged in")
+        uid = json.get('uid')
+        dao = Chat_GroupsDAO()
+        groups_list = dao.getGroupsUserBelongsTo(uid)
+        result_list = []
+        for row in groups_list:
+            result = self.build_chat_groups_dict(row)
+            result['isAdmin'] = row[3]
+            result_list.append(result)
+        return jsonify(Chat_groups=result_list)
 
+    #get specific chat group
     def getGroupById(self, gid):
         dao = Chat_GroupsDAO()
         row = dao.getGroupById(gid)
         if not row:
             return jsonify(Error = "Group Not Found"), 404
         else:
-            return row[1]
+            chat_info = self.build_chat_groups_dict(row)
+            participants_list = dao.getUsersInAGroup(gid)
+            result_list = []
+            for p in participants_list:
+                result = self.build_chat_groups_participants_dict(p)
+                result_list.append(result)
+            chat_info['participants'] = result_list
+            return jsonify(chat_info)
 
-    #get groups a user belongs to
-    def getAllGroupsByUser(self, uid):
-        # dao = Chat_GroupsDAO()
-        # groups_list = dao.getGroupsByUser(uid)
-        # result_list = []
-        # for row in groups_list:
-        #     result = self.build_chat_groups_dict(row)
-        #     result_list.append(result)
-        # return jsonify(Chat_groups=result_list)
-        result = []
-        if uid == 1:
-            result.append(self.groups[0])
-            result.append(self.groups[1])
-            return jsonify(result)
-        elif uid==2:
-            result.append(self.groups[2])
-            result.append(self.groups[3])
-            return jsonify(result)
-        else:
-            return jsonify("User not found")
+    def createNewGroup(self, g_info):
+        dao = Chat_GroupsDAO()
+        gname = g_info['gname']
+        gphoto = g_info['gphoto']
+        gadmin = g_info['gadmin']
 
+        gid = dao.createNewGroup(gname=gname, gphoto=gphoto, gadmin=gadmin)
+        g_info['gid']=gid
+        return jsonify(g_info)
 
     #get users in a specific group
     def getAllUsersByGroup(self, gid):
