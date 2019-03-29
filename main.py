@@ -107,6 +107,7 @@ def getChatGroupsForUser():
     if request.method == 'GET': return Chat_GroupsHandler().getGroupsUserBelongsTo(json=request.json)
     else:                       return jsonify(Error="Method not allowed."), 405
 
+#tested - works
 # method to get metadata of a group a user belongs to
 @app.route('/groups/<int:gid>', methods=['GET'])
 def getSpecificGroup(gid):
@@ -146,7 +147,7 @@ def createPost(gid):
 # get all posts of a specified group
 @app.route('/groups/<int:gid>/posts', methods=['GET'])
 def getAllPostOfAGroup(gid):
-    if request.method == 'GET': return jsonify(Output="GET request received")
+    if request.method == 'GET': return PostsHandler().getPostsByGroup(gid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # get specific post from group
@@ -161,6 +162,7 @@ def replyToPost(gid):
     if request.method == 'POST': return jsonify(Output="POST request received")
     else:                        return jsonify(Error="Method not allowed."), 405
 
+# tested - works
 # see all groups available
 @app.route('/dashboard/groups', methods=['GET'])
 def dash_GetAllChatGroups():

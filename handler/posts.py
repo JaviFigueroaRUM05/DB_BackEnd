@@ -26,6 +26,17 @@ class PostsHandler:
             result_list.append(result)
         return jsonify(Posts=result_list)
 
+        # get posts in a group
+    def getPostsByGroup(self, gid):
+        dao = PostsDAO()
+        post_list = dao.getPostsByGroup(gid)
+        result_list = []
+        for row in post_list:
+            result = self.build_post_dict(row)
+            result_list.append(result)
+        return jsonify(Posts=result_list)
+
+
     def createNewPost(self, p_info):
         # dao = PostsDAO()
         # p_date= p_info['post_date']
@@ -52,18 +63,6 @@ class PostsHandler:
                 return jsonify(result)
             else:
                 return 404
-
-    #get posts in a group
-    def getPostsByGroup(self, gid):
-        # dao = PostsDAO()
-        # post_list = dao.getPostsByGroup(pid)
-        # result_list = []
-        # for row in post_list:
-        #     result = self.build_post_dict(row)
-        #     result_list.append(result)
-        # return jsonify(Posts=result_list)
-
-        return jsonify(self.posts)
 
 
     #get posts made my a certain user

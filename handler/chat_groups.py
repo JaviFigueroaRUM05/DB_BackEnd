@@ -72,28 +72,6 @@ class Chat_GroupsHandler:
         g_info['gid']=gid
         return jsonify(g_info)
 
-    #get users in a specific group
-    def getAllUsersByGroup(self, gid):
-        # dao = Chat_GroupsDAO()
-        # groups_list = dao.getUsersByGroup(gid)
-        # result_list = []
-        # for row in groups_list:
-        #     result = {}
-        #     result['uid'] = row[0]
-        #     result['uname'] = row[1]
-        #     result_list.append(result)
-        # return jsonify(Users_in_Chat=result_list)
-        result = []
-        if gid == 1:
-            result.append(self.users[0])
-            result.append(self.users[1])
-            return jsonify(result)
-        elif gid == 2:
-            result.append(self.users[2])
-            result.append(self.users[3])
-            return jsonify(result)
-        else:
-            return jsonify("Group not found")
 
     def addUserToGroup(self, new_user):
         # dao = Chat_GroupsDAO()
