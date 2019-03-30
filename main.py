@@ -51,28 +51,31 @@ def getUserInfoByUname(uname):
 # Gets User Contacts
 @app.route('/user/contacts', methods=['GET'])
 def getAllContacts():
-    if request.method == 'GET': return UserHandler().getAllContacts(headers=request.headers)
+    if request.method == 'GET': return UserHandler().getAllContacts(uid=request.headers.get('Authorization'))
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # get a specific contact from a user's contact list.
 @app.route('/user/contacts/<int:cid>', methods=['GET'])
 def getSpecificContact(cid):
-    if request.method == 'GET': return UserHandler().getSpecificContact(headers=request.headers, cid=cid)
+    if request.method == 'GET': return UserHandler().getSpecificContact(uid=request.headers.get('Authorization'),
+                                                                        cid=cid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Adds contact to user's contact list.
 @app.route('/user/add-contact', methods=['POST'])
 def addContact():
-    if request.method == 'POST': return UserHandler().addContact(headers=request.headers, json=request.json)
+    if request.method == 'POST': return UserHandler().addContact(uid=request.headers.get('Authorization'),
+                                                                 json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 
 # Delete a contact from a user's contact list.
 @app.route('/user/delete-contact/<int:cid>', methods=['DELETE'])
 def deleteContact(cid):
-    if request.method == 'DELETE': return UserHandler().removeContact(headers=request.headers, cid=cid)
+    if request.method == 'DELETE': return UserHandler().removeContact(uid=request.headers.get('Authorization'),
+                                                                      cid=cid)
     else:                          return jsonify(Error="Method not allowed."), 405
 
 
@@ -94,7 +97,8 @@ def getSpecificUser(uid):
 # Get the contacts of a specific user.
 @app.route('/dashboard/users/<int:uid>/contacts', methods=['GET'])
 def getSpecificUserContacts(uid):
-    if request.method == 'GET': return UserHandler().getAllContactsDashboard(headers=request.headers, uid=uid)
+    if request.method == 'GET': return UserHandler().getAllContactsDashboard(authUID=request.headers.get('Authorization'),
+                                                                             uid=uid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # ------------------------- Group Routes ----------------------------------------
