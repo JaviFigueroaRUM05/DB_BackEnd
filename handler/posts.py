@@ -46,9 +46,10 @@ class PostsHandler:
         result_list = []
         for row in post_list:
             result = self.build_post_dict(row)
-            result['original_post'] = row[7]
-            result['likes'] = row[8]
-            result['dislikes'] = row[9]
+            result['uname'] = row[7]
+            result['original_post'] = row[8]
+            result['likes'] = row[9]
+            result['dislikes'] = row[10]
             result_list.append(result)
         return jsonify(Posts=result_list)
 

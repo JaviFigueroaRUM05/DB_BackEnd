@@ -33,10 +33,9 @@ class Chat_GroupsHandler:
 
     #tested - working
     # get groups a user belongs to
-    def getGroupsUserBelongsTo(self, json):
-        if not json.get('uid'):
-            return jsonify(Error="No user logged in")
-        uid = json.get('uid')
+    def getGroupsUserBelongsTo(self, uid):
+        if not uid:
+          return jsonify(Error="No user logged in")
         dao = Chat_GroupsDAO()
         groups_list = dao.getGroupsUserBelongsTo(uid)
         result_list = []
@@ -44,7 +43,7 @@ class Chat_GroupsHandler:
             result = self.build_chat_groups_dict(row)
             result['isAdmin'] = row[3]
             result_list.append(result)
-        return jsonify(Chat_groups=result_list)
+        return jsonify(result_list)
 
     #get specific chat group
     def getGroupById(self, gid):

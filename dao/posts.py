@@ -23,8 +23,8 @@ class PostsDAO:
     # get all posts of a specified group
     def getPostsByGroup(self, gid):
         cursor = self.conn.cursor()
-        query = " select postid, pdate, message, mediatype, media, uid as author, gid, op as original_post, likes, dislikes " \
-                "from (select * from" \
+        query = " select postid, pdate, message, mediatype, media, uid as author, gid, uname as author_uname, op as original_post, likes, dislikes " \
+                " from ((select * from" \
                 "     (select * from post where gid = %s) as all_posts" \
                 "           left outer join" \
                 "     (select p1.postid as op, p2.postid as reply" \
@@ -43,9 +43,14 @@ class PostsDAO:
                 "               where reaction.postid = post.postid and rType='D'" \
                 "               group by post.postID) as dislikes_table" \
                 "               on pid1 = pid2) as reactions" \
-                "               on all_and_replies.postid = reactions.pid1;"
+                "                on all_and_replies.postid = reactions.pid1 ) as g_posts_info	" \
+                "                   left outer join" \
+                "                   (select postid as pid3, uid as uid3, uname" \
+                "                   from users natural inner join post natural inner join cgroup" \
+                "                   where gid = %s) as U" \
+                "                      on U.pid3 = g_posts_info.postid"
 
-        cursor.execute(query, (gid,))
+        cursor.execute(query, (gid,gid,))
         result = []
         for row in cursor:
             result.append(row)
@@ -54,7 +59,7 @@ class PostsDAO:
     # get posts by unique post id
     def getPostById(self, pid):
         cursor = self.conn.cursor()
-        select_info_post = " select postid, pdate, message, mediatype, media, uid as author, gid, op as original_post, likes, dislikes " \
+        select_info_post = " select postid, pdate, message, mediatype, media, uid as author, gid, uname as author_uname, op as original_post, likes, dislikes " \
                 "from (select * from" \
                 "     (select * from post where postid = %s) as all_posts" \
                 "           left outer join" \
@@ -74,8 +79,13 @@ class PostsDAO:
                 "               where reaction.postid = post.postid and rType='D'" \
                 "               group by post.postID) as dislikes_table" \
                 "               on pid1 = pid2) as reactions" \
-                "               on all_and_replies.postid = reactions.pid1;"
-        cursor.execute(select_info_post, (pid,))
+                "                on all_and_replies.postid = reactions.pid1) as g_posts_info	" \
+                "                   left outer join" \
+                "                   (select postid as pid3, uid as uid3, uname" \
+                "                   from users natural inner join post natural inner join cgroup" \
+                "                   where postid = %s) as U" \
+                "                      on U.pid3 = g_posts_info.postid"
+        cursor.execute(select_info_post, (pid,pid,))
         result = cursor.fetchone()
         return result
 
