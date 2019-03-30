@@ -104,7 +104,7 @@ def getSpecificUserContacts(uid):
 # Remember uid is passed through json
 @app.route('/groups', methods=['GET'])
 def getChatGroupsForUser():
-    if request.method == 'GET': return Chat_GroupsHandler().getGroupsUserBelongsTo(request.headers.get('uid'))
+    if request.method == 'GET': return Chat_GroupsHandler().getGroupsUserBelongsTo(request.headers.get('Authorization'))
     else:                       return jsonify(Error="Method not allowed."), 405
 
 #tested - works
@@ -155,7 +155,7 @@ def getAllPostOfAGroup(gid):
 # get specific post from group
 @app.route('/groups/<int:gid>/posts/<int:pid>', methods=['GET'])
 def getSpecificPost(gid, pid):
-    if request.method == 'GET': return PostsHandler().getPostsById(pid)
+    if request.method == 'GET': return PostsHandler().getPostsById(gid,pid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # reply to a specific group
