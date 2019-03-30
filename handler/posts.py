@@ -16,6 +16,19 @@ class PostsHandler:
         result['gid'] = row[6]
         return result
 
+    def build_users_dict(self, row):
+        result = {}
+        result['uid'] = row[0]
+        result['uname'] = row[1]
+        result['first_name'] = row[2]
+        result['last_name'] = row[3]
+        result['email'] = row[4]
+        result['phone'] = row[5]
+        result['rid'] = row[6]
+        result['rdate'] = row[7]
+        result['rtype'] = row[8]
+        return result
+
 
     def getAllPosts(self):
         dao = PostsDAO()
@@ -33,8 +46,27 @@ class PostsHandler:
         result_list = []
         for row in post_list:
             result = self.build_post_dict(row)
+            result['original_post'] = row[7]
+            result['likes'] = row[8]
+            result['dislikes'] = row[9]
             result_list.append(result)
         return jsonify(Posts=result_list)
+
+
+    def getPostsById(self, pid):
+        dao = PostsDAO()
+        row = dao.getPostById(pid)
+        if not row:
+            return jsonify(Error = "Post Not Found"), 404
+        else:
+            post_info = self.build_post_dict(row)
+            users = dao.getUsers_and_Reactions(pid)
+            users_list = []
+            for user in users:
+                result = self.build_users_dict(user)
+                users_list.append(result)
+            response = {"Post": post_info, "Reactions_Users" : users_list}
+            return jsonify(response)
 
 
     def createNewPost(self, p_info):
@@ -49,20 +81,6 @@ class PostsHandler:
          p_info['pid']=5
          self.posts.append(p_info)
          return jsonify(p_info)
-
-    def getPostsById(self, pid):
-        # dao = PostsDAO()
-        # row = dao.getPostById(pid)
-        # if not row:
-        #     return jsonify(Error = "Group Not Found"), 404
-        # else:
-        #     return row[1]
-        for row in self.posts:
-            if(row['pid'] == pid):
-                result = row
-                return jsonify(result)
-            else:
-                return 404
 
 
     #get posts made my a certain user

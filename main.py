@@ -144,16 +144,18 @@ def createPost(gid):
     if request.method == 'POST': return jsonify(Output="POST request received")
     else:                        return jsonify(Error="Method not allowed."), 405
 
+# tested - works
 # get all posts of a specified group
 @app.route('/groups/<int:gid>/posts', methods=['GET'])
 def getAllPostOfAGroup(gid):
     if request.method == 'GET': return PostsHandler().getPostsByGroup(gid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
+# tested - works
 # get specific post from group
 @app.route('/groups/<int:gid>/posts/<int:pid>', methods=['GET'])
 def getSpecificPost(gid, pid):
-    if request.method == 'GET': return jsonify(Output="GET request received")
+    if request.method == 'GET': return PostsHandler().getPostsById(pid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # reply to a specific group
@@ -171,14 +173,14 @@ def dash_GetAllChatGroups():
 
 # get specific group info
 @app.route('/dashboard/groups/<int:gid>', methods=['GET'])
-def dash_getSpecificGroup():
-    if request.method == 'GET': return jsonify(Output="GET request received")
+def dash_getSpecificGroup(gid):
+    if request.method == 'GET':  return Chat_GroupsHandler().getGroupById(gid=gid)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 # get all posts from a specific group
 @app.route('/dashboard/groups/<int:gid>/posts', methods=['GET'])
-def dash_getPostsFromGroup():
-    if request.method == 'GET': return jsonify(Output="GET request received")
+def dash_getPostsFromGroup(gid):
+    if request.method == 'GET':  return PostsHandler().getPostsByGroup(gid)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 
