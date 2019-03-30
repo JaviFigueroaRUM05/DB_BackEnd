@@ -74,7 +74,10 @@ class UserHandler:
             response = self._buildUserResponse(user_tuple=user)
         return jsonify(response)
 
-    def getAllContacts(self, uid):
+    def getAllContacts(self, headers):
+        if not headers.get('Authorization'):
+            return jsonify(Error="No Authorization header sent."), 401
+        uid = headers['Authorization']
         dao = ContactsDAO()
         contacts = dao.getUserContacts(uid=uid)
         contactList = []
@@ -83,7 +86,22 @@ class UserHandler:
         response = {'contacts': contactList}
         return jsonify(response)
 
-    def getSpecificContact(self, uid, cid):
+    def getAllContactsDashboard(self, uid, headers):
+        if not headers.get('Authorization'):
+            return jsonify(Error="No Authorization header sent to Dashboard method."), 401
+        authID = headers['Authorization'] #Currently does not use Auth for anything.
+        dao = ContactsDAO()
+        contacts = dao.getUserContacts(uid=uid)
+        contactList = []
+        for contact in contacts:
+            contactList.append(self._buildUserResponse(user_tuple=contact))
+        response = {'contacts': contactList}
+        return jsonify(response)
+
+    def getSpecificContact(self, headers, cid):
+        if not headers.get('Authorization'):
+            return jsonify(Error="No Authorization header sent."), 401
+        uid = headers['Authorization']
         dao = ContactsDAO()
         contact = dao.getContactById(uid=uid, cid=cid)
         if not contact:
@@ -93,7 +111,10 @@ class UserHandler:
             response = self._buildUserResponse(user_tuple=contact)
         return jsonify(response)
 
-    def addContact(self, uid, json):
+    def addContact(self, headers, json):
+        if not headers.get('Authorization'):
+            return jsonify(Error="No Authorization header sent."), 401
+        uid = headers['Authorization']
         for key in ADDCONTACTNAMEKEYS:
             if key not in json:
                 return jsonify(Error='Missing credentials from submission: ' + key), 400
@@ -115,7 +136,10 @@ class UserHandler:
 
         return jsonify({"uid": addResult[0], "cid": addResult[1]}), 201
 
-    def removeContact(self, uid, cid):
+    def removeContact(self, headers, cid):
+        if not headers.get('Authorization'):
+            return jsonify(Error="No Authorization header sent."), 401
+        uid = headers['Authorization']
         dao = ContactsDAO()
         removalResult = dao.removeContactById(uid=uid, cid=cid)
         return jsonify(removalResult), 202

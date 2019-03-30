@@ -49,30 +49,30 @@ def getUserInfoByUname(uname):
 
 
 # Gets User Contacts
-@app.route('/user/<int:uid>/contacts', methods=['GET'])
-def getAllContacts(uid):
-    if request.method == 'GET': return UserHandler().getAllContacts(uid=uid)
+@app.route('/user/contacts', methods=['GET'])
+def getAllContacts():
+    if request.method == 'GET': return UserHandler().getAllContacts(headers=request.headers)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # get a specific contact from a user's contact list.
-@app.route('/user/<int:uid>/contacts/<int:cid>', methods=['GET'])
-def getSpecificContact(uid, cid):
-    if request.method == 'GET': return UserHandler().getSpecificContact(uid=uid, cid=cid)
+@app.route('/user/contacts/<int:cid>', methods=['GET'])
+def getSpecificContact(cid):
+    if request.method == 'GET': return UserHandler().getSpecificContact(headers=request.headers, cid=cid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
 # Adds contact to user's contact list.
-@app.route('/user/<int:uid>/add-contact', methods=['POST'])
-def addContact(uid):
-    if request.method == 'POST': return UserHandler().addContact(uid=uid, json=request.json)
+@app.route('/user/add-contact', methods=['POST'])
+def addContact():
+    if request.method == 'POST': return UserHandler().addContact(headers=request.headers, json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 
 # Delete a contact from a user's contact list.
-@app.route('/user/<int:uid>/delete-contact/<int:cid>', methods=['DELETE'])
-def deleteContact(uid, cid):
-    if request.method == 'DELETE': return UserHandler().removeContact(uid=uid, cid=cid)
+@app.route('/user/delete-contact/<int:cid>', methods=['DELETE'])
+def deleteContact(cid):
+    if request.method == 'DELETE': return UserHandler().removeContact(headers=request.headers, cid=cid)
     else:                          return jsonify(Error="Method not allowed."), 405
 
 
@@ -92,10 +92,9 @@ def getSpecificUser(uid):
 
 
 # Get the contacts of a specific user.
-# This route, though seperate, is redundant with /user/<int:uid>/contacts
 @app.route('/dashboard/users/<int:uid>/contacts', methods=['GET'])
 def getSpecificUserContacts(uid):
-    if request.method == 'GET': return UserHandler().getAllContacts(uid=uid)
+    if request.method == 'GET': return UserHandler().getAllContactsDashboard(headers=request.headers, uid=uid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # ------------------------- Group Routes ----------------------------------------
