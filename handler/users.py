@@ -4,7 +4,8 @@ from dao.contacts import ContactsDAO
 from dao.users import UsersDAO
 
 ADDCONTACTNAMEKEYS = ['first_name', 'last_name']
-CREATENEWUSERKEYS = ['uname', 'email', 'password', 'first_name', 'last_name', 'phone']
+CREATENEWUSERKEYS = ['uname', 'email', 'password',
+                     'first_name', 'last_name', 'phone']
 LOGINKEYS = ['email', 'password']
 
 
@@ -26,9 +27,12 @@ class UserHandler:
                 return jsonify(Error='Missing credentials from submission: ' + key), 400
         dao = UsersDAO()
         try:
-            uid = dao.insertNewUser(uname=json['uname'], email=json['email'],
-                                    password=json['password'], first_name=json['first_name'],
-                                    last_name=json['last_name'], phone=json['phone'])
+            uid = dao.insertNewUser(uname=json['uname'],
+                                    email=json['email'],
+                                    password=json['password'],
+                                    first_name=json['first_name'],
+                                    last_name=json['last_name'],
+                                    phone=json['phone'])
         except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))
@@ -85,8 +89,9 @@ class UserHandler:
         response = {'contacts': contactList}
         return jsonify(response)
 
+    # Currently does not use authUID for anything.
     def getAllContactsDashboard(self, uid, authUID):
-        if not authUID:       #Currently does not use Auth for anything.
+        if not authUID:
             return jsonify(Error="No Authorization header sent to Dashboard method."), 401
         dao = ContactsDAO()
         contacts = dao.getUserContacts(uid=uid)
@@ -119,11 +124,15 @@ class UserHandler:
 
         try:
             if json.get('email'):
-                addResult = dao.addContactByEmail(uid=uid, first_name=json['first_name'],
-                                                  last_name=json['last_name'], email=json['email'])
+                addResult = dao.addContactByEmail(uid=uid,
+                                                  first_name=json['first_name'],
+                                                  last_name=json['last_name'],
+                                                  email=json['email'])
             elif json.get('phone'):
-                addResult = dao.addContactByPhone(uid=uid, first_name=json["first_name"],
-                                                  last_name=json["last_name"], phone=json["phone"])
+                addResult = dao.addContactByPhone(uid=uid,
+                                                  first_name=json["first_name"],
+                                                  last_name=json["last_name"],
+                                                  phone=json["phone"])
             else:
                 return jsonify(Error='Neither email nor phone were provided.'), 400
         except IntegrityError as e:
