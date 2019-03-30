@@ -60,7 +60,7 @@ class PostsDAO:
     def getPostById(self, pid):
         cursor = self.conn.cursor()
         select_info_post = " select postid, pdate, message, mediatype, media, uid as author, gid, uname as author_uname, op as original_post, likes, dislikes " \
-                "from (select * from" \
+                "from ((select * from" \
                 "     (select * from post where postid = %s) as all_posts" \
                 "           left outer join" \
                 "     (select p1.postid as op, p2.postid as reply" \

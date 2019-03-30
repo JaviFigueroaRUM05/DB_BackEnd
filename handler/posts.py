@@ -61,6 +61,7 @@ class PostsHandler:
             return jsonify(Error = "Post Not Found"), 404
         else:
             post_info = self.build_post_dict(row)
+            post_info['uname'] = row[7]
             users = dao.getUsers_and_Reactions(pid)
             users_list = []
             for user in users:
