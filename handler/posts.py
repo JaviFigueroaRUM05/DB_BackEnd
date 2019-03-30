@@ -54,11 +54,11 @@ class PostsHandler:
         return jsonify(Posts=result_list)
 
 
-    def getPostsById(self, pid):
+    def getPostsById(self, gid, pid):
         dao = PostsDAO()
-        row = dao.getPostById(pid)
+        row = dao.getPostById(gid, pid)
         if not row:
-            return jsonify(Error = "Post Not Found"), 404
+            return jsonify(Error = "Post Not Found or not in this group"), 404
         else:
             post_info = self.build_post_dict(row)
             post_info['uname'] = row[7]

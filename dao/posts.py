@@ -57,11 +57,11 @@ class PostsDAO:
         return result
 
     # get posts by unique post id
-    def getPostById(self, pid):
+    def getPostById(self, gid, pid):
         cursor = self.conn.cursor()
         select_info_post = " select postid, pdate, message, mediatype, media, uid as author, gid, uname as author_uname, op as original_post, likes, dislikes " \
                 "from ((select * from" \
-                "     (select * from post where postid = %s) as all_posts" \
+                "     (select * from post where gid = %s and postid = %s) as all_posts" \
                 "           left outer join" \
                 "     (select p1.postid as op, p2.postid as reply" \
                 "      from post as p1, replies, post as p2" \
@@ -83,9 +83,9 @@ class PostsDAO:
                 "                   left outer join" \
                 "                   (select postid as pid3, uid as uid3, uname" \
                 "                   from users natural inner join post natural inner join cgroup" \
-                "                   where postid = %s) as U" \
+                "                   where gid = %s) as U" \
                 "                      on U.pid3 = g_posts_info.postid"
-        cursor.execute(select_info_post, (pid,pid,))
+        cursor.execute(select_info_post, (gid,pid,gid,))
         result = cursor.fetchone()
         return result
 
