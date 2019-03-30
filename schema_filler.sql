@@ -145,13 +145,13 @@ insert into post(pdate, message, mediaType,uid, gid) VALUES('2019-03-17 18:44:00
     (select uid from users where uname='Hydrogon'), (select gid from cgroup where gname='trambolico'));
 
 --Replies
-insert into replies(opID, replyID) VALUES((select postid from post where message='Midnight!'),
+insert into replies(replyID, opID) VALUES((select postid from post where message='Midnight!'),
 (select postid from post where  message='When does the Narwhal Bacon?'));
-insert into replies(opID, replyID) VALUES((select postid from post where message='LOL!'),
+insert into replies(replyID, opID) VALUES((select postid from post where message='LOL!'),
 (select postid from post where message='Im drowning in my classes #pleasehelp'));
-insert into replies(opID, replyID) VALUES((select postid from post where message='Dude, wtf!'),
+insert into replies(replyID, opID) VALUES((select postid from post where message='Dude, wtf!'),
 (select postid from post where message='Back from the dead to touch more kids!'));
-insert into replies(opID, replyID) VALUES((select postid from post where message='Notice me, senpai!'),
+insert into replies(replyID, opID) VALUES((select postid from post where message='Notice me, senpai!'),
 (select postid from post where message='All this talk of sensuality seems illogical.'));
 
 --Hashtags
