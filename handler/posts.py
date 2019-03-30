@@ -46,9 +46,10 @@ class PostsHandler:
         result_list = []
         for row in post_list:
             result = self.build_post_dict(row)
-            result['original_post'] = row[7]
-            result['likes'] = row[8]
-            result['dislikes'] = row[9]
+            result['uname'] = row[7]
+            result['original_post'] = row[8]
+            result['likes'] = row[9]
+            result['dislikes'] = row[10]
             result_list.append(result)
         return jsonify(Posts=result_list)
 
@@ -60,6 +61,7 @@ class PostsHandler:
             return jsonify(Error = "Post Not Found"), 404
         else:
             post_info = self.build_post_dict(row)
+            post_info['uname'] = row[7]
             users = dao.getUsers_and_Reactions(pid)
             users_list = []
             for user in users:

@@ -104,7 +104,7 @@ def getSpecificUserContacts(uid):
 # Remember uid is passed through json
 @app.route('/groups', methods=['GET'])
 def getChatGroupsForUser():
-    if request.method == 'GET': return Chat_GroupsHandler().getGroupsUserBelongsTo(json=request.json)
+    if request.method == 'GET': return Chat_GroupsHandler().getGroupsUserBelongsTo(request.headers.get('uid'))
     else:                       return jsonify(Error="Method not allowed."), 405
 
 #tested - works
