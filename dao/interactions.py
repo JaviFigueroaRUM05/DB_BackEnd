@@ -37,7 +37,8 @@ class InteractionsDao:
         cursor = self.conn.cursor()
         query = "update Reaction " \
                 "set rtype = 'L', rdate = $s " \
-                "where uid = %s and postID = %s"
+                "where uid = %s and postID = %s" \
+                "returning *"
         cursor.execute(query, (date, uid, pid,))
         result = []
         for row in cursor:
@@ -48,7 +49,8 @@ class InteractionsDao:
         cursor = self.conn.cursor()
         query = "update Reaction " \
                 "set rtype = 'D', rdate = $s " \
-                "where uid = %s and postID = %s"
+                "where uid = %s and postID = %s" \
+                "returning *"
         cursor.execute(query, (date, uid, pid,))
         cursor.execute()
         result = []
@@ -59,7 +61,8 @@ class InteractionsDao:
     def delete_reaction(self, pid, uid):
         cursor = self.conn.cursor()
         query = "delete from Reaction " \
-                "where uid = %s and postID = %s"
+                "where uid = %s and postID = %s" \
+                "returning *"
         cursor.execute(query, (uid, pid,))
         result = []
         for row in cursor:
