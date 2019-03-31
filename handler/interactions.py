@@ -56,7 +56,7 @@ class InteractionHandler:
             result = dao.delete_reaction(pid, uid)
             if result[0] != 'DELETE 0': return jsonify(Status='Success')
             else:                       return jsonify(Status='Failure')
-        except Exception as e:
+        except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))
 
@@ -67,6 +67,6 @@ class InteractionHandler:
             result = dao.get_reaction(pid, uid)
             if result.size == 0: return jsonify(Reaction='none')
             else:                return jsonify(Reaction=result[0])
-        except Exception as e:
+        except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))

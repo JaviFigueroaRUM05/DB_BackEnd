@@ -13,7 +13,7 @@ class InteractionsDao:
 
     def like_post(self, pid, uid, date):
         cursor = self.conn.cursor()
-        query = "insert into reaction (rdate, rtype, postID, uid) " \
+        query = "insert into Reaction (rdate, rtype, postID, uid) " \
                 "VALUES (%s, 'L', %s, %s)"
         cursor.execute(query, (date, pid, uid,))
         result = []
@@ -23,7 +23,7 @@ class InteractionsDao:
 
     def dislike_post(self, pid, uid, date):
         cursor = self.conn.cursor()
-        query = "insert into reaction (rdate, rtype, postID, uid) " \
+        query = "insert into Reaction (rdate, rtype, postID, uid) " \
                 "VALUES (%s, 'D', %s, %s)"
         cursor.execute(query, (date, pid, uid,))
         result = []
@@ -33,7 +33,7 @@ class InteractionsDao:
 
     def update_to_like(self, pid, uid, date):
         cursor = self.conn.cursor()
-        query = "update reaction " \
+        query = "update Reaction " \
                 "set rtype = 'L', rdate = $s " \
                 "where uid = %s and postID = %s"
         cursor.execute(query, (date, uid, pid,))
@@ -44,7 +44,7 @@ class InteractionsDao:
 
     def update_to_dislike(self, pid, uid, date):
         cursor = self.conn.cursor()
-        query = "update reaction " \
+        query = "update Reaction " \
                 "set rtype = 'D', rdate = $s " \
                 "where uid = %s and postID = %s"
         cursor.execute(query, (date, uid, pid,))
@@ -56,7 +56,7 @@ class InteractionsDao:
 
     def delete_reaction(self, pid, uid):
         cursor = self.conn.cursor()
-        query = "delete from reaction " \
+        query = "delete from Reaction " \
                 "where uid = %s and postID = %s"
         cursor.execute(query, (uid, pid,))
         result = []
@@ -67,7 +67,7 @@ class InteractionsDao:
     def get_reaction(self, pid, uid):
         cursor = self.conn.cursor()
         query = "select rtype " \
-                "from reaction " \
+                "from Reaction " \
                 "where uid = %s and postID = %s"
         cursor.execute(query, (uid, pid,))
         result = []
