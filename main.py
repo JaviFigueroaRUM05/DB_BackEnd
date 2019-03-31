@@ -198,7 +198,7 @@ def getUserPosts(id):
 def post_reaction(gid, pid):
     json = request.get_json()
     handler = InteractionHandler()
-    uid = request.headers.get['Authorization']
+    uid = request.headers.get('Authorization')
     if   request.method == 'POST':   return handler.post_reaction(uid, pid, json)
     else:                            return jsonify(Error="Method not allowed."), 405
 
@@ -207,7 +207,7 @@ def post_reaction(gid, pid):
 def update_reaction(gid, pid):
     json = request.get_json()
     handler = InteractionHandler()
-    uid = request.headers.get['Authorization']
+    uid = request.headers.get('Authorization')
     if   request.method == 'PUT':    return handler.update_reaction(uid, pid, json)
     else:                            return jsonify(Error="Method not allowed."), 405
 
@@ -215,7 +215,7 @@ def update_reaction(gid, pid):
 @app.route('/groups/<int:gid>/posts/<int:pid>/delete-reaction', methods=['DELETE'])
 def delete_reaction(gid, pid):
     handler = InteractionHandler()
-    uid = request.headers.get['Authorization']
+    uid = request.headers.get('Authorization')
     if   request.method == 'DELETE': return handler.delete_reaction(uid, pid)
     else:                            return jsonify(Error="Method not allowed."), 405
 
@@ -223,7 +223,7 @@ def delete_reaction(gid, pid):
 @app.route('/groups/<int:gid>/posts/<int:pid>/reaction', methods=['GET'])
 def get_reaction(gid, pid):
     handler = InteractionHandler()
-    uid = request.headers.get['Authorization']
+    uid = request.headers.get('Authorization')
     if   request.method == 'GET':    return handler.get_reaction(uid, pid)
     else:                            return jsonify(Error="Method not allowed."), 405
 

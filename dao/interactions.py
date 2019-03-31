@@ -14,7 +14,8 @@ class InteractionsDao:
     def like_post(self, pid, uid, date):
         cursor = self.conn.cursor()
         query = "insert into Reaction (rdate, rtype, postID, uid) " \
-                "VALUES (%s, 'L', %s, %s)"
+                "VALUES (%s, 'L', %s, %s)" \
+                "returning *"
         cursor.execute(query, (date, pid, uid,))
         result = []
         for row in cursor:
@@ -24,7 +25,8 @@ class InteractionsDao:
     def dislike_post(self, pid, uid, date):
         cursor = self.conn.cursor()
         query = "insert into Reaction (rdate, rtype, postID, uid) " \
-                "VALUES (%s, 'D', %s, %s)"
+                "VALUES (%s, 'D', %s, %s)" \
+                "returning *"
         cursor.execute(query, (date, pid, uid,))
         result = []
         for row in cursor:

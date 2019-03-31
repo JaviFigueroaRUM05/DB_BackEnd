@@ -19,9 +19,9 @@ class InteractionHandler:
         date = json.get('rDate')
         try:
             if json.get('rType') == 'like':
-                dao.likePost(pid, uid, date)
+                dao.like_post(pid, uid, date)
             elif json.get('rType') == 'dislike':
-                dao.dislikePost(pid, uid, date)
+                dao.dislike_post(pid, uid, date)
             else:
                 return jsonify(Error='Invalid value'), 400
             return jsonify(Status='Success')
