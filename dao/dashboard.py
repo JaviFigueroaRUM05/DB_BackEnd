@@ -103,9 +103,9 @@ class DashboardDao:
     def get_reactions_to_post(self, pid):
         cursor = self.conn.cursor()
         query = "select rType, uname " \
-                "from (Reaction natural inner join Users) " \ 
+                "from (Reaction natural inner join Users) " \
                 "      natural inner join " \
-                "      (select postID from Post)"\ 
+                "      (select postID from Post)"\
                 "where postID = %s"
         cursor.execute(query, (pid,))
         result = []
@@ -139,7 +139,7 @@ class DashboardDao:
         cursor = self.conn.cursor()
         query = "select uname, count(*) " \
                 "from Post natural inner join Users " \
-                "where rDate = %s " \ 
+                "where rDate = %s " \
                 "group by uname desc"
         cursor.execute(query, (date,))
         result = []
