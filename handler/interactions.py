@@ -36,15 +36,12 @@ class InteractionHandler:
         date = json.get('rDate')
         try:
             if json.get('rType') == 'like':
-                result = dao.update_to_like(pid, uid, date)
-                if result[0] != 'UPDATE 0': return jsonify(Status='Success')
-                else:                       return jsonify(Status='Failure')
+                dao.update_to_like(pid, uid, date)
             elif json.get('rType') == 'dislike':
-                result = dao.update_to_dislike(pid, uid, date)
-                if result[0] != 'UPDATE 0': return jsonify(Status='Success')
-                else:                       return jsonify(Status='Failure')
+                dao.update_to_dislike(pid, uid, date)
             else:
                 return jsonify(Error='Invalid value'), 400
+            return jsonify(Status='Success')
         except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))
@@ -53,9 +50,8 @@ class InteractionHandler:
     def delete_reaction(uid, pid):
         dao = InteractionsDao()
         try:
-            result = dao.delete_reaction(pid, uid)
-            if result[0] != 'DELETE 0': return jsonify(Status='Success')
-            else:                       return jsonify(Status='Failure')
+            dao.delete_reaction(pid, uid)
+            return jsonify(Status='Success')
         except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))
