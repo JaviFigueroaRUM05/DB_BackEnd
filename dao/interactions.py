@@ -17,6 +17,7 @@ class InteractionsDao:
                 "VALUES (%s, 'L', %s, %s)" \
                 "returning *"
         cursor.execute(query, (date, pid, uid,))
+        self.conn.commit()
         result = []
         for row in cursor:
             result.append(row)
@@ -28,6 +29,7 @@ class InteractionsDao:
                 "VALUES (%s, 'D', %s, %s)" \
                 "returning *"
         cursor.execute(query, (date, pid, uid,))
+        self.conn.commit()
         result = []
         for row in cursor:
             result.append(row)
@@ -40,6 +42,7 @@ class InteractionsDao:
                 "where uid = %s and postID = %s" \
                 "returning *"
         cursor.execute(query, (date, uid, pid,))
+        self.conn.commit()
         result = []
         for row in cursor:
             result.append(row)
@@ -52,7 +55,7 @@ class InteractionsDao:
                 "where uid = %s and postID = %s" \
                 "returning *"
         cursor.execute(query, (date, uid, pid,))
-        cursor.execute()
+        self.conn.commit()
         result = []
         for row in cursor:
             result.append(row)
@@ -64,6 +67,7 @@ class InteractionsDao:
                 "where uid = %s and postID = %s" \
                 "returning *"
         cursor.execute(query, (uid, pid,))
+        self.conn.commit()
         result = []
         for row in cursor:
             result.append(row)
@@ -71,9 +75,7 @@ class InteractionsDao:
 
     def get_reaction(self, pid, uid):
         cursor = self.conn.cursor()
-        query = "select rtype " \
-                "from Reaction " \
-                "where uid = %s and postID = %s"
+        query = "select rtype from Reaction where uid = %s and postID = %s"
         cursor.execute(query, (uid, pid,))
         result = []
         for row in cursor:

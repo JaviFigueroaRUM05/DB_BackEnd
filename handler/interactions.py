@@ -61,8 +61,8 @@ class InteractionHandler:
         dao = InteractionsDao()
         try:
             result = dao.get_reaction(pid, uid)
-            if result.size == 0: return jsonify(Reaction='none')
-            else:                return jsonify(Reaction=result[0])
+            if len(result) == 0: return jsonify(Reaction='none')
+            else:                return jsonify(Reaction=result[0][0])
         except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))

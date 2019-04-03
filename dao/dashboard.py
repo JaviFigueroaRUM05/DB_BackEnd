@@ -25,9 +25,9 @@ class DashboardDao:
 
     def get_all_posts(self):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname" \
-                "from (Post natural inner join Users) natural inner join Cgroup" \
-                "order by postID desc"
+        query = """select pDate, message, mediaType, media, gName, uname
+                   from (Post natural inner join Users) natural inner join Cgroup
+                   order by postID desc"""
         cursor.execute(query)
         result = []
         for row in cursor:
