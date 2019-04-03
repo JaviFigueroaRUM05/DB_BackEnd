@@ -48,7 +48,8 @@ class PostsDAO:
                 "                   (select postid as pid3, uid as uid3, uname" \
                 "                   from users natural inner join post natural inner join cgroup" \
                 "                   where gid = %s) as U" \
-                "                      on U.pid3 = g_posts_info.postid"
+                "                      on U.pid3 = g_posts_info.postid" \
+                "                       order by pdate;"
 
         cursor.execute(query, (gid,gid,))
         result = []
