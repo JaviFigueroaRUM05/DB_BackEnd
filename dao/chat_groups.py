@@ -19,6 +19,19 @@ class Chat_GroupsDAO:
             result.append(row)
         return result
 
+    def getAllAdmins(self):
+        cursor = self.conn.cursor()
+        query = "select gid, gname, gphoto, uid, uname, " \
+                "first_name, last_name, email, phone, isAdmin " \
+                "from users natural inner join participants " \
+                "natural inner join cgroup " \
+                "where isAdmin='t';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     # get all groups that a user belongs to
     def getGroupsUserBelongsTo(self, uid):
         cursor = self.conn.cursor()

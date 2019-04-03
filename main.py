@@ -185,6 +185,13 @@ def dash_GetAllChatGroups():
     if request.method == 'GET': return Chat_GroupsHandler().getAllGroups()
     else:                       return jsonify(Error="Method not allowed."), 405
 
+# tested - works
+# see all groups available
+@app.route('/dashboard/groups/admins', methods=['GET'])
+def dash_getAllAdmins():
+    if request.method == 'GET': return Chat_GroupsHandler().getAllAdmins()
+    else:                       return jsonify(Error="Method not allowed."), 405
+
 # get specific group info
 @app.route('/dashboard/groups/<int:gid>', methods=['GET'])
 def dash_getSpecificGroup(gid):
