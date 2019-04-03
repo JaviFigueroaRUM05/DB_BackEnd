@@ -3,62 +3,73 @@ from dao.posts import PostsDAO
 
 class PostsHandler:
 
-    posts = [{
-        'pid' : 1,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'hello friend'
-    },
-    {
-        'pid' : 2,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'hello'
-    },
-    {
-        'pid' : 3,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'what you doing?'
-    },
-    {
-        'pid' : 4,
-        'p_date': '2019-01-25',
-        'media' : 'default',
-        'message' : 'studying... :('
-    }
-    ]
-
+    posts_cont = ["postid","pdate","message","mediatype", "media","uid","gid"]
 
     def build_post_dict(self, row):
         result = {}
-        result['pid'] = row[0]
-        result['post_date'] = row[1]
-        result['media'] = row[2]
-        result['message'] = row[3]
-        result['gid'] = row[4]
-        result['reply_to_post'] = row[5]
+        result['postid'] = row[0]
+        result['pdate'] = row[1]
+        result['message'] = row[2]
+        result['mediatype'] = row[3]
+        result['media'] = row[4]
+        result['uid'] = row[5]
+        result['gid'] = row[6]
         return result
 
-    def build_posts_attributes(self, pid, post_date, media, message, gid, reply_to_post):
+    def build_users_dict(self, row):
         result = {}
-        result['pid'] = pid
-        result['post_date'] = post_date
-        result['media'] = media
-        result['message'] = message
-        result['gid'] = gid
-        result['reply_to_post'] = reply_to_post
+        result['uid'] = row[0]
+        result['uname'] = row[1]
+        result['first_name'] = row[2]
+        result['last_name'] = row[3]
+        result['email'] = row[4]
+        result['phone'] = row[5]
+        result['rid'] = row[6]
+        result['rdate'] = row[7]
+        result['rtype'] = row[8]
         return result
+
 
     def getAllPosts(self):
-        # dao = PostsDAO()
-        # posts_list = dao.getAllPosts()
-        # result_list = []
-        # for row in posts_list:
-        #     result = self.build_post_dict(row)
-        #     result_list.append(result)
-        # return jsonify(Posts=result_list)
-        return jsonify(self.posts)
+        dao = PostsDAO()
+        posts_list = dao.getAllPosts()
+        result_list = []
+        for row in posts_list:
+            result = self.build_post_dict(row)
+            result_list.append(result)
+        return jsonify(Posts=result_list)
+
+        # get posts in a group
+    def getPostsByGroup(self, gid):
+        dao = PostsDAO()
+        post_list = dao.getPostsByGroup(gid)
+        result_list = []
+        for row in post_list:
+            result = self.build_post_dict(row)
+            result['uname'] = row[7]
+            result['original_post'] = row[8]
+            result['likes'] = row[9]
+            result['dislikes'] = row[10]
+            result_list.append(result)
+        return jsonify(Posts=result_list)
+
+
+    def getPostsById(self, gid, pid):
+        dao = PostsDAO()
+        row = dao.getPostById(gid, pid)
+        if not row:
+            return jsonify(Error = "Post Not Found or not in this group"), 404
+        else:
+            post_info = self.build_post_dict(row)
+            post_info['uname'] = row[7]
+            users = dao.getUsers_and_Reactions(pid)
+            users_list = []
+            for user in users:
+                result = self.build_users_dict(user)
+                users_list.append(result)
+            response = {"Post": post_info, "Reactions_Users" : users_list}
+            return jsonify(response)
+
 
     def createNewPost(self, p_info):
         # dao = PostsDAO()
@@ -72,32 +83,6 @@ class PostsHandler:
          p_info['pid']=5
          self.posts.append(p_info)
          return jsonify(p_info)
-
-    def getPostsById(self, pid):
-        # dao = PostsDAO()
-        # row = dao.getPostById(pid)
-        # if not row:
-        #     return jsonify(Error = "Group Not Found"), 404
-        # else:
-        #     return row[1]
-        for row in self.posts:
-            if(row['pid'] == pid):
-                result = row
-                return jsonify(result)
-            else:
-                return 404
-
-    #get posts in a group
-    def getPostsByGroup(self, gid):
-        # dao = PostsDAO()
-        # post_list = dao.getPostsByGroup(pid)
-        # result_list = []
-        # for row in post_list:
-        #     result = self.build_post_dict(row)
-        #     result_list.append(result)
-        # return jsonify(Posts=result_list)
-
-        return jsonify(self.posts)
 
 
     #get posts made my a certain user

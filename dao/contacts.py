@@ -14,61 +14,44 @@ class ContactsDAO:
 
     def getUserContacts(self, uid):
         cursor = self.conn.cursor()
-        query = "select cid from contacts where uid= %s;"
+        query = "select uid, uname, first_name, last_name, email, phone " \
+                "from users " \
+                "where uid in (select cid from contacts where uid= %s);"
         cursor.execute(query, (uid,))
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def getContactById(self, uid):
+    def getContactById(self, uid, cid):
         cursor = self.conn.cursor()
-        query = "select uname, fname, lname, photo from users where uid = %s;"
-        cursor.execute(query, (uid,))
+        query = "select uid, uname, first_name, last_name, email, phone " \
+                "from users " \
+                "where uid =" \
+                "(select cid from contacts where uid=%s and cid=%s);"
+        cursor.execute(query, (uid,cid,))
         result = cursor.fetchone()
         return result
 
-    def verifyContactById(self, uid, cid):
+    def addContactByEmail(self, uid, first_name, last_name, email):
         cursor = self.conn.cursor()
-        query = "select cid from contacts where uid = %s AND cid = %s;"
-        cursor.execute(query, (uid, cid,))
-        result = cursor.fetchone()
-        return result
-
-# Currently allows duplicate entries
-    # Uses logic in python.
-    # TODO put logic in sql.
-    def addContactById(self, uid, cid):
-        contactExists = self.getContactById(uid=cid)
-        if not contactExists:
-            return contactExists
-        cursor = self.conn.cursor()
-        query = "insert into contacts(uid,cid) values(%s, %s);"
-        cursor.execute(query, (uid, cid,))
+        query = "insert into contacts (uid, cid)"\
+                "values (%s, (select uid from users where first_name=%s"\
+                "AND last_name=%s AND email=%s)) returning uid,cid;"
+        cursor.execute(query, (uid, first_name, last_name, email, ))
+        response = cursor.fetchone()
         self.conn.commit()
-        return {'contactCreated': True}
+        return response
 
-# TODO modify/verify this ugly query to actually work with new tables.
-    def addContactByEmail(self, uid, fname, lname, email):
+    def addContactByPhone(self, uid, first_name, last_name, phone):
         cursor = self.conn.cursor()
-        query = "insert into contacts(uid,cid) " \
-                "values(%s, select uid from users where " \
-                "pid=(select pid from person where fname=%s " \
-                "and lname=%s and email=%s));"
-        cursor.execute(query, (uid, fname, lname, email, ))
+        query = "insert into contacts (uid, cid)"\
+                "values (%s, (select uid from users where first_name=%s"\
+                "AND last_name=%s AND phone=%s)) returning uid,cid;"
+        cursor.execute(query, (uid, first_name, last_name, phone,))
+        response = cursor.fetchone()
         self.conn.commit()
-        return {'contactCreated': True}
-
-    # TODO modify/verify this ugly query to actually work with new tables.
-    def addContactByPhone(self, uid, fname, lname, phone):
-        cursor = self.conn.cursor()
-        query = "insert into contacts(uid,cid) " \
-                "values(%s, select uid from users where " \
-                "pid=(select pid from person where fname=%s " \
-                "and lname=%s and phone=%s));"
-        cursor.execute(query, (uid, fname, lname, phone,))
-        self.conn.commit()
-        return {'contactCreated': True}
+        return response
 
     def removeContactById(self, uid, cid):
         cursor = self.conn.cursor()
