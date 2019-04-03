@@ -118,6 +118,16 @@ def getSpecificGroup(gid):
     if request.method == 'GET': return Chat_GroupsHandler().getGroupById(gid=gid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
+    # tested - works
+    # method to get metadata of a group a user belongs to
+
+
+@app.route('/groups/<int:gid>/admins', methods=['GET'])
+def getSpecificGroupAdmins(gid):
+    if request.method == 'GET': return Chat_GroupsHandler().getGroupAdmins(gid=gid)
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
 # create new chat group
 @app.route('/group/create', methods=['POST'])
 def createGroup():

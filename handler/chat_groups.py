@@ -61,6 +61,18 @@ class Chat_GroupsHandler:
             chat_info['participants'] = result_list
             return jsonify(chat_info)
 
+
+    def getGroupAdmins(self, gid):
+        dao = Chat_GroupsDAO()
+        admin_list = dao.getAdminsInAGroup(gid=gid)
+        if not admin_list:
+            return jsonify(Error= "Group with gid=" +gid+ " does not have any Admins."),404
+        else:
+            admins=[]
+            for admin in admin_list:
+                admins.append(self.build_chat_groups_participants_dict(admin))
+            return jsonify({"admins": admins}), 200
+
     def createNewGroup(self, g_info):
         dao = Chat_GroupsDAO()
         gname = g_info['gname']

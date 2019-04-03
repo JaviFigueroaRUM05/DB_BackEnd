@@ -53,6 +53,19 @@ class Chat_GroupsDAO:
             result.append(row)
         return result
 
+        # get all users on a group
+
+    def getAdminsInAGroup(self, gid):
+        cursor = self.conn.cursor()
+        query = "select uid, isAdmin, uname, first_name, last_name, email, phone " \
+                "from participants natural inner join users " \
+                "where gid = %s AND isAdmin='t';"
+        cursor.execute(query, (gid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getUserInGroup(self, gid, uid):
         cursor = self.conn.cursor()
         query = "select * from participants where group_id = %s AND participant_id = %s;;"
