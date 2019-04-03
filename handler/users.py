@@ -57,7 +57,7 @@ class UserHandler:
         UserList = []
         for user in users:
             UserList.append(self._buildUserResponse(user_tuple=user))
-        response = {'contacts': UserList}
+        response = {'users': UserList}
         return jsonify(response)
 
     def getUserInfoByID(self, uid):
