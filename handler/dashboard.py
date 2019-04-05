@@ -34,6 +34,7 @@ class DashboardHandler:
                 dic['media'] = row[3]
                 dic['gName'] = row[4]
                 dic['uName'] = row[5]
+                dic['pid'] = row[6]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
@@ -54,6 +55,7 @@ class DashboardHandler:
                 dic['media'] = row[3]
                 dic['gName'] = row[4]
                 dic['uName'] = row[5]
+                dic['pid'] = row[6]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
@@ -90,6 +92,7 @@ class DashboardHandler:
                 dic['media'] = row[3]
                 dic['gName'] = row[4]
                 dic['uName'] = row[5]
+                dic['pid'] = row[6]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
@@ -110,6 +113,7 @@ class DashboardHandler:
                 dic['media'] = row[3]
                 dic['gName'] = row[4]
                 dic['uName'] = row[5]
+                dic['pid'] = row[6]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
@@ -130,6 +134,7 @@ class DashboardHandler:
                 dic['media'] = row[3]
                 dic['gName'] = row[4]
                 dic['uName'] = row[5]
+                dic['pid'] = row[6]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
@@ -150,6 +155,7 @@ class DashboardHandler:
                 dic['media'] = row[3]
                 dic['gName'] = row[4]
                 dic['uName'] = row[5]
+                dic['pid'] = row[6]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:

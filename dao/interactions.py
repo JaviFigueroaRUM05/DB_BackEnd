@@ -38,7 +38,7 @@ class InteractionsDao:
     def update_to_like(self, pid, uid, date):
         cursor = self.conn.cursor()
         query = "update Reaction " \
-                "set rtype = 'L', rdate = $s " \
+                "set rtype = 'L', rdate = %s " \
                 "where uid = %s and postID = %s " \
                 "returning *"
         cursor.execute(query, (date, uid, pid,))
@@ -51,7 +51,7 @@ class InteractionsDao:
     def update_to_dislike(self, pid, uid, date):
         cursor = self.conn.cursor()
         query = "update Reaction " \
-                "set rtype = 'D', rdate = $s " \
+                "set rtype = 'D', rdate = %s " \
                 "where uid = %s and postID = %s " \
                 "returning *"
         cursor.execute(query, (date, uid, pid,))

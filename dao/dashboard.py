@@ -25,7 +25,7 @@ class DashboardDao:
 
     def get_all_posts(self):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname " \
+        query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
                 "order by postID desc"
         cursor.execute(query)
@@ -36,7 +36,7 @@ class DashboardDao:
 
     def get_replies_to_post(self, pid):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname " \
+        query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (select replyID " \
                 "      from Replies " \
                 "      where opID = %s) " \
@@ -51,7 +51,7 @@ class DashboardDao:
 
     def get_all_posts_by_user(self, uid):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname " \
+        query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
                 "where uid = %s " \
                 "order by postID"
@@ -63,7 +63,7 @@ class DashboardDao:
 
     def get_all_posts_by_date(self, date):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname " \
+        query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
                 "where pDate = %s " \
                 "order by postID"
@@ -75,7 +75,7 @@ class DashboardDao:
 
     def get_all_posts_by_user_date(self, uid, date):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname " \
+        query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
                 "where uid = %s and pDate = %s " \
                 "order by postID"
@@ -87,7 +87,7 @@ class DashboardDao:
 
     def get_all_replies_by_date(self, date):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname " \
+        query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (select replyID " \
                 "      from Replies) " \
                 "      natural inner join " \
