@@ -26,7 +26,7 @@ class InteractionsDao:
     def dislike_post(self, pid, uid, date):
         cursor = self.conn.cursor()
         query = "insert into Reaction (rdate, rtype, postID, uid) " \
-                "VALUES (%s, 'D', %s, %s)" \
+                "VALUES (%s, 'D', %s, %s) " \
                 "returning *"
         cursor.execute(query, (date, pid, uid,))
         self.conn.commit()
@@ -39,7 +39,7 @@ class InteractionsDao:
         cursor = self.conn.cursor()
         query = "update Reaction " \
                 "set rtype = 'L', rdate = $s " \
-                "where uid = %s and postID = %s" \
+                "where uid = %s and postID = %s " \
                 "returning *"
         cursor.execute(query, (date, uid, pid,))
         self.conn.commit()
@@ -52,7 +52,7 @@ class InteractionsDao:
         cursor = self.conn.cursor()
         query = "update Reaction " \
                 "set rtype = 'D', rdate = $s " \
-                "where uid = %s and postID = %s" \
+                "where uid = %s and postID = %s " \
                 "returning *"
         cursor.execute(query, (date, uid, pid,))
         self.conn.commit()
@@ -64,7 +64,7 @@ class InteractionsDao:
     def delete_reaction(self, pid, uid):
         cursor = self.conn.cursor()
         query = "delete from Reaction " \
-                "where uid = %s and postID = %s" \
+                "where uid = %s and postID = %s " \
                 "returning *"
         cursor.execute(query, (uid, pid,))
         self.conn.commit()
