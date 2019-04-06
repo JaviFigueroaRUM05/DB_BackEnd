@@ -25,7 +25,7 @@ class DashboardDao:
 
     def get_all_posts(self):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname, postid " \
+        query = "select pDate, message, mediaType, media, gName, uid, postid " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
                 "order by postID desc"
         cursor.execute(query)
@@ -100,11 +100,11 @@ class DashboardDao:
 
     def get_reactions_to_post(self, pid):
         cursor = self.conn.cursor()
-        query = "select rType, uname " \
+        query = "select rType, uname, rdate, uid " \
                 "from (Reaction natural inner join Users) " \
                 "      natural inner join " \
-                "      (select postID from Post) "\
-                "where postID = %s"
+                "      (select postID from Post) as p "\
+                "where p.postID = %s"
         cursor.execute(query, (pid,))
         result = []
         for row in cursor:

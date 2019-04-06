@@ -33,7 +33,7 @@ class DashboardHandler:
                 dic['mediaType'] = row[2]
                 dic['media'] = row[3]
                 dic['gName'] = row[4]
-                dic['uName'] = row[5]
+                dic['uid'] = row[5]
                 dic['pid'] = row[6]
                 result.append(dic)
             return jsonify(result)
@@ -70,6 +70,8 @@ class DashboardHandler:
                 dic = {}
                 dic['rType'] = row[0]
                 dic['uName'] = row[1]
+                dic['date']  = row[2]
+                dic['uid']   = row[3]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
