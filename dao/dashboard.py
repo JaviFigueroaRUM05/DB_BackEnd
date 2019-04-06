@@ -36,13 +36,10 @@ class DashboardDao:
 
     def get_replies_to_post(self, pid):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname, postid " \
-                "from (select replyID " \
-                "      from Replies " \
-                "      where opID = %s) " \
-                "      natural inner join " \
-                "      ((Post natural inner join Users) natural inner join Cgroup) " \
-                "order by postID"
+        query = "select p.pDate, p.message, p.mediatype, p.media, p.postid " \
+                "from (select * from replies) as r, post as p " \
+                "where r.replyid = p.postid and r.opid = %s " \
+                "order by p.postID"
         cursor.execute(query, (pid,))
         result = []
         for row in cursor:
@@ -65,9 +62,10 @@ class DashboardDao:
         cursor = self.conn.cursor()
         query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
-                "where pDate = %s " \
-                "order by postID"
-        cursor.execute(query, (date,))
+                "where pDate between %s and %s"
+        start_date = date + " 00:00:00"
+        end_date   = date + " 23:59:59"
+        cursor.execute(query, (start_date, end_date,))
         result = []
         for row in cursor:
             result.append(row)

@@ -53,9 +53,7 @@ class DashboardHandler:
                 dic['message'] = row[1]
                 dic['mediaType'] = row[2]
                 dic['media'] = row[3]
-                dic['gName'] = row[4]
-                dic['uName'] = row[5]
-                dic['pid'] = row[6]
+                dic['pid'] = row[4]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
@@ -104,6 +102,7 @@ class DashboardHandler:
         dao = DashboardDao()
         try:
             query_result = dao.get_all_posts_by_date(date)
+            result_dic = {}
             result = []
             for row in query_result:
                 dic = {}
@@ -115,7 +114,9 @@ class DashboardHandler:
                 dic['uName'] = row[5]
                 dic['pid'] = row[6]
                 result.append(dic)
-            return jsonify(result)
+            result_dic['count'] = len(result)
+            result_dic['posts'] = result
+            return jsonify(result_dic)
         except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))
