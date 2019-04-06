@@ -256,6 +256,12 @@ def dash_reactions(pid):
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
+@app.route('/dashboard/posts/<int:pid>/reactions-count', methods=['GET'])
+def dash_reactions_count(pid):
+    handler = DashboardHandler()
+    if request.method == 'GET' : return handler.get_reactions_count_to_post(pid)
+    else                       : return jsonify(Error="Mathod not allowed."), 405
+
 @app.route('/dashboard/posts/user/<int:uid>', methods=['GET'])
 def dash_user_posts(uid):
     handler = DashboardHandler()
@@ -267,6 +273,13 @@ def dash_user_posts(uid):
 def dash_daily_posts(date):
     handler = DashboardHandler()
     if request.method == 'GET': return handler.get_all_posts_by_date(date)
+    else:                       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/dashboard/daily-posts-count', methods=['GET'])
+def dash_daily_posts_count():
+    handler = DashboardHandler()
+    if request.method == 'GET': return handler.get_all_posts_count_by_date()
     else:                       return jsonify(Error="Method not allowed."), 405
 
 

@@ -71,6 +71,17 @@ class DashboardDao:
             result.append(row)
         return result
 
+    def get_all_posts_count_by_date(self):
+        cursor = self.conn.cursor()
+        query  = "select date(pdate), count(*) " \
+                 "from post " \
+                 "group by date(pdate)"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def get_all_posts_by_user_date(self, uid, date):
         cursor = self.conn.cursor()
         query = "select pDate, message, mediaType, media, gName, uname, postid " \
@@ -105,6 +116,18 @@ class DashboardDao:
                 "      natural inner join " \
                 "      (select postID from Post) as p "\
                 "where p.postID = %s"
+        cursor.execute(query, (pid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def get_reactions_count_to_post(self, pid):
+        cursor = self.conn.cursor()
+        query = "select rType, postid, count(*) " \
+                "from Reaction " \
+                "where postid = %s " \
+                "group by postid, rtype"
         cursor.execute(query, (pid,))
         result = []
         for row in cursor:

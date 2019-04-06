@@ -65,14 +65,31 @@ class DashboardHandler:
         dao = DashboardDao()
         try:
             query_result = dao.get_reactions_to_post(pid)
-            result = []
+            result = { 'Like' : [], 'Dislike' : []}
+            for row in query_result:
+                person = {}
+                person['uName'] = row[1]
+                person['date']  = row[2]
+                person['uid']   = row[3]
+                if row[0] == 'L' : result['Like'].append(person)
+                else             : result['Dislike'].append(person)
+            return jsonify(result)
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
+
+    @staticmethod
+    def get_reactions_count_to_post(pid):
+        dao = DashboardDao()
+        try:
+            query_result = dao.get_reactions_count_to_post(pid)
+            result = {}
             for row in query_result:
                 dic = {}
-                dic['rType'] = row[0]
-                dic['uName'] = row[1]
-                dic['date']  = row[2]
-                dic['uid']   = row[3]
-                result.append(dic)
+                dic['pid']  = row[1]
+                dic['count']   = row[2]
+                if row[0] == 'L' : result['Like'] = dic
+                else             : result['Dislike'] = dic
             return jsonify(result)
         except IntegrityError as e:
             print(e)
@@ -119,6 +136,22 @@ class DashboardHandler:
             result_dic['count'] = len(result)
             result_dic['posts'] = result
             return jsonify(result_dic)
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
+
+    @staticmethod
+    def get_all_posts_count_by_date():
+        dao = DashboardDao()
+        try:
+            query_result = dao.get_all_posts_count_by_date()
+            result = []
+            for row in query_result:
+                dic = {}
+                dic['date'] = row[0]
+                dic['count'] = row[1]
+                result.append(dic)
+            return jsonify(result)
         except IntegrityError as e:
             print(e)
             return jsonify(Error=str(e))
