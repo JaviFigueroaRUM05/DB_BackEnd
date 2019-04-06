@@ -11,7 +11,7 @@ class DashboardDao:
                                                                     pg_config['host'])
         self.conn = psycopg2._connect(connection_url)
 
-    def get_trending_hashtag(self):
+    def get_trending_hashtags(self):
         cursor = self.conn.cursor()
         query = "select hName, count(*) " \
                 "from Hashtag natural inner join Tagged " \
