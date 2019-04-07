@@ -1,15 +1,4 @@
 -- Fill in test data for schema
---Persons
---insert into person(first_name, last_name, email, phone) VALUES( 'Brian' , 'Rodriguez', 'brianrodrig@gmail.com', '7879067012');
---insert into person(first_name, last_name, email, phone) VALUES( 'Sofia' , 'Saavedra', 'sofia.saavedra@gmail.com', '7876666969');
---insert into person(first_name, last_name, email, phone) VALUES( 'Javier' , 'Figueroa', 'javier.figueroa29@upr.edu', '7879637512');
---insert into person(first_name, last_name, email, phone) VALUES( 'Manuel' , 'Rodriguez', 'manuel.rodriguez@gmail.com', '9395874632');
---insert into person(first_name, last_name, email, phone) VALUES( 'Michael' , 'Jackson', 'ayuwoki@gmail.com', '8459638521');
---insert into person(first_name, last_name, email, phone) VALUES( 'Michael' , 'Buble', 'mbuble@yahoo.com', '7974521683');
---insert into person(first_name, last_name, email, phone) VALUES( 'Eddie' , 'VanHalen', 'hotforteacher@gmail.com', '4512222222');
---insert into person(first_name, last_name, email, phone) VALUES( 'Harvey' , 'Weinstein', 'metoo@gmail.com', '9116969696');
---insert into person(first_name, last_name, email, phone) VALUES( 'Leonard' , 'Neemoy', 'spock@gmail.com', '0101010101');
---insert into person(first_name, last_name, email, phone) VALUES( 'Tom' , 'Frommyspace', 'tom@myspace.com', '9394561248');
 
 --Users
 insert into users(uname, password, first_name, last_name, email, phone) VALUES(
@@ -62,27 +51,6 @@ insert into cgroup(gname)VALUES('The first chat');
 insert into cgroup(gname)VALUES('Admins');
 insert into cgroup(gname)VALUES('trambolico');
 
---Group admins
---insert into admins(uid, gid) VALUES((select uid from users where uname='TheParodict'),
---    (select gid from cgroup where gname='The first chat'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='TheParodict'),
---    (select gid from cgroup where gname='Admins'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='Javi'),
---    (select gid from cgroup where gname='Admins'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='Hydrogon'),
---    (select gid from cgroup where gname='Admins'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='TheParodict'),
---    (select gid from cgroup where gname='trambolico'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='Javi'),
---    (select gid from cgroup where gname='trambolico'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='Hydrogon'),
---    (select gid from cgroup where gname='trambolico'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='ManuelDB'),
---    (select gid from cgroup where gname='trambolico'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='tom'),
---    (select gid from cgroup where gname='trambolico'));
---insert into admins(uid, gid) VALUES((select uid from users where uname='EVH'),
---    (select gid from cgroup where gname='trambolico'));
 
 --Group Participants (how do we make sure admins are participants?)
 insert into participants(uid, gid, isAdmin) VALUES((select uid from users where uname='TheParodict'),
@@ -165,7 +133,3 @@ insert into tagged(postid, hid) VALUES((select postid from post where message='I
 insert into reaction (rdate, rtype, postID, uid) VALUES('2019-03-17 18:43:00', 'L',
     (select postid from post where message='Im drowning in my classes #pleasehelp'),
     (select uid from users where uname='Javi'));
-
---Reacts
---insert into reacts(uid, rid) VALUES((select uid from users where uname='Javi'),
---    (select rid from reaction where rdate='2019-03-17 18:43:00'));
