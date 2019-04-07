@@ -22,8 +22,9 @@ Create table Post(postID serial primary key, pDate timestamp NOT NULL, message t
                   mediaType char(1) NOT NULL,  media text, uid integer references Users(uid) NOT NULL,
                   gid integer references Cgroup(gid) NOT NULL);
 
-Create table Reaction(rid serial primary key, rDate timestamp NOT NULL, rType char (1) NOT NULL,
-                      postID integer references Post(postID) NOT NULL, uid integer references Users(uid) NOT NULL);
+Create table Reaction(rid serial, rDate timestamp NOT NULL, rType char (1) NOT NULL,
+                      postID integer references Post(postID) NOT NULL, uid integer references Users(uid) NOT NULL,
+                      primary key (postID, uid));
 
 --Create table Reacts(uid integer references Users(uid) NOT NULL, rid integer references Reaction(rid) NOT NULL,
 --                    primary key (uid, rid));

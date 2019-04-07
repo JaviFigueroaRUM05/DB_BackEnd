@@ -21,6 +21,21 @@ class Chat_GroupsHandler:
         result['phone'] = row[6]
         return result
 
+    def build_all_admins_dict(self, row):
+        result = {}
+        result['gid'] = row[0]
+        result['gName'] = row[1]
+        result['gPhoto'] = row[2]
+        result['uid'] = row[3]
+        result['uname'] = row[4]
+        result['first_name'] = row[5]
+        result['last_name'] = row[6]
+        result['email'] = row[7]
+        result['phone'] = row[8]
+        result['isAdmin'] = row[9]
+        return result
+
+
     # tested - works
     def getAllGroups(self):
         dao = Chat_GroupsDAO()
@@ -30,6 +45,17 @@ class Chat_GroupsHandler:
             result = self.build_chat_groups_dict(row)
             result_list.append(result)
         return jsonify(Chat_groups=result_list)
+
+
+    # tested - works
+    def getAllAdmins(self):
+        dao = Chat_GroupsDAO()
+        adminsList = dao.getAllAdmins()
+        result_list = []
+        for row in adminsList:
+            result = self.build_all_admins_dict(row)
+            result_list.append(result)
+        return jsonify(Admins=result_list)
 
     #tested - working
     # get groups a user belongs to
@@ -60,6 +86,18 @@ class Chat_GroupsHandler:
                 result_list.append(result)
             chat_info['participants'] = result_list
             return jsonify(chat_info)
+
+
+    def getGroupAdmins(self, gid):
+        dao = Chat_GroupsDAO()
+        admin_list = dao.getAdminsInAGroup(gid=gid)
+        if not admin_list:
+            return jsonify(Error= "Group with gid=" +gid+ " does not have any Admins."),404
+        else:
+            admins=[]
+            for admin in admin_list:
+                admins.append(self.build_chat_groups_participants_dict(admin))
+            return jsonify({"admins": admins}), 200
 
     def createNewGroup(self, g_info):
         dao = Chat_GroupsDAO()
