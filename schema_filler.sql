@@ -111,6 +111,8 @@ insert into post(pdate, message, mediaType,uid, gid) VALUES('2019-03-17 18:43:00
     (select uid from users where uname='Vulcan'), (select gid from cgroup where gname='trambolico'));
 insert into post(pdate, message, mediaType,uid, gid) VALUES('2019-03-17 18:44:00','Notice me, senpai!','n',
     (select uid from users where uname='Hydrogon'), (select gid from cgroup where gname='trambolico'));
+insert into post(pdate, message, mediatype, media, uid, gid) VALUES('2019-03-17 18:44:00','Look at this pretty doggo!', 'p',
+    'media/profile_pics/corgi-monocle.jpg', (select uid from users where uname='Hydrogon'), (select gid from cgroup where gname='trambolico'));
 
 --Replies
 insert into replies(replyID, opID) VALUES((select postid from post where message='Midnight!'),
