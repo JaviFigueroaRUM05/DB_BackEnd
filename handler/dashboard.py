@@ -230,13 +230,11 @@ class DashboardHandler:
         dao = DashboardDao()
         try:
             query_result = dao.get_active_users_by_date()
-            result = []
+            result = {}
             for row in query_result:
-                dic = {}
-                dic['date'] = row[0]
-                dic['uName'] = row[1]
-                dic['count'] = row[2]
-                result.append(dic)
+                result[str(row[0])] = []
+            for row in query_result:
+                result[str(row[0])].append({ 'uname' : row[1], 'count' : row[2] })
             return jsonify(result)
         except IntegrityError as e:
             print(e)
