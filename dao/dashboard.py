@@ -86,24 +86,21 @@ class DashboardDao:
         cursor = self.conn.cursor()
         query = "select pDate, message, mediaType, media, gName, uname, postid " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
-                "where uid = %s and pDate = %s " \
-                "order by postID"
-        cursor.execute(query, (uid, date,))
+                "where uid = %s and (pDate between %s and %s)"
+        start_date = date + " 00:00:00"
+        end_date   = date + " 23:59:59"
+        cursor.execute(query, (uid, start_date, end_date,))
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def get_all_replies_by_date(self, date):
+    def get_all_replies_by_date(self):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname, postid " \
-                "from (select replyID " \
-                "      from Replies) " \
-                "      natural inner join " \
-                "      ((Post natural inner join Users) natural inner join Cgroup) " \
-                "where pDate = %s " \
-                "order by postID"
-        cursor.execute(query, (date,))
+        query = "select date(pDate), count(*) " \
+                "from (Replies inner join Post on Replies.replyid = Post.postid) " \
+                "group by date(pdate)"
+        cursor.execute(query,)
         result = []
         for row in cursor:
             result.append(row)
@@ -134,35 +131,37 @@ class DashboardDao:
             result.append(row)
         return result
 
-    def get_likes_by_date(self, date):
+    def get_likes_by_date(self):
         cursor = self.conn.cursor()
-        query = "select count(*) " \
+        query = "select date(rdate), count(*) " \
                 "from Reaction " \
-                "where rDate = %s and rType = 'L' "
-        cursor.execute(query, (date,))
+                "where rType = 'L' " \
+                "group by date(rdate)"
+        cursor.execute(query,)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def get_dislikes_by_date(self, date):
+    def get_dislikes_by_date(self):
         cursor = self.conn.cursor()
-        query = "select count(*) " \
+        query = "select date(rdate), count(*) " \
                 "from Reaction " \
-                "where rDate = %s and rType = 'D'"
-        cursor.execute(query, (date,))
+                "where rType = 'D' " \
+                "group by date(rdate)"
+        cursor.execute(query,)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def get_active_users_by_date(self, date):
+    def get_active_users_by_date(self):
         cursor = self.conn.cursor()
-        query = "select uname, count(*) " \
+        query = "select date(pdate), uname, count(*) " \
                 "from Post natural inner join Users " \
-                "where rDate = %s " \
-                "group by uname desc"
-        cursor.execute(query, (date,))
+                "group by date(pdate), uname " \
+                "order by date(pdate), count(*) desc"
+        cursor.execute(query,)
         result = []
         for row in cursor:
             result.append(row)
