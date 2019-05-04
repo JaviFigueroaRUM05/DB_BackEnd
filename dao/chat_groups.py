@@ -126,22 +126,17 @@ class Chat_GroupsDAO:
             self.conn.commit()
             return result
 
+    def deleteGroup(self, gid):
+        cursor = self.conn.cursor()
+        query = "select uid from participants where gid = %s; "
+        cursor.execute(query, (gid,))
+        result = []
+        for row in cursor:
+            result.append(self.removeParticipants(row, gid))
+        self.conn.commit()
+        return result
+
     # ---------------------- yet to implement through handlers --------
-
-    #delete group from own's personal group collection
-    def deleteGroupIfUser(self, uid):
-        cursor = self.conn.cursor()
-        query = "delete from participants where uid = %s; "
-        cursor.execute(query, (uid,))
-        self.conn.commit()
-        return uid
-
-    def deleteGroupIfAdmin(self, uid):
-        cursor = self.conn.cursor()
-        query = "delete from chat_administration where uid = %s; "
-        cursor.execute(query, (uid,))
-        self.conn.commit()
-        return uid
 
     def setGroupAdmin(self, uid, gid):
         cursor = self.conn.cursor()

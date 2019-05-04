@@ -151,13 +151,14 @@ def deleteparticipantsFromGroup(gid):
     else:                          return jsonify(Error="Method not allowed."), 405
 
 # delete group (only for admins)
-#
+# working
 @app.route('/groups/<int:gid>/delete-group', methods=['DELETE'])
 def deleteGroup(gid):
-    if request.method == 'DELETE': return jsonify(Output="DELETE request received")
+    if request.method == 'DELETE': return Chat_GroupsHandler().deleteGroup(gid=gid)
     else:                          return jsonify(Error="Method not allowed."), 405
 
 # authors a post to the specified group
+#
 @app.route('/groups/<int:gid>/create-post', methods=['POST'])
 def createPost(gid):
     if request.method == 'POST': return jsonify(Output="POST request received")

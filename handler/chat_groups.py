@@ -113,7 +113,6 @@ class Chat_GroupsHandler:
         json['gid']=gid
         return jsonify({"group": json})
 
-
     def addParticipant(self, gid, json):
         dao = Chat_GroupsDAO()
         uid_participant = dao.addParticipant(uid=json['uid'], gid=gid, isAdmin=['isadmin'])  #uid comes from json
@@ -125,6 +124,6 @@ class Chat_GroupsHandler:
         return jsonify({"removed_participant": result})
 
     def deleteGroup(self, gid):
-
-    
-        return jsonify(self.groups[0])
+        dao = Chat_GroupsDAO()
+        result = dao.deleteGroup(gid=gid)
+        return jsonify({"deleted_group": result})
