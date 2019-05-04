@@ -1,4 +1,5 @@
 from flask import jsonify
+from psycopg2 import IntegrityError
 from dao.chat_groups import Chat_GroupsDAO
 
 class Chat_GroupsHandler:
@@ -99,47 +100,31 @@ class Chat_GroupsHandler:
                 admins.append(self.build_chat_groups_participants_dict(admin))
             return jsonify({"admins": admins}), 200
 
-    def createNewGroup(self, g_info):
+    def createNewGroup(self, json):
         dao = Chat_GroupsDAO()
-        gname = g_info['gname']
-        gphoto = g_info['gphoto']
-        gadmin = g_info['gadmin']
+        try:
+            if json.get('gname') :
+                gid = dao.createNewGroup(gname=json['gname'], gphoto=['gphoto'])
+            else:
+                return jsonify(Error='Group name not provided.'), 400
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
+        json['gid']=gid
+        return jsonify({"group": json})
 
-        gid = dao.createNewGroup(gname=gname, gphoto=gphoto, gadmin=gadmin)
-        g_info['gid']=gid
-        return jsonify(g_info)
 
+    def addParticipant(self, gid, json):
+        dao = Chat_GroupsDAO()
+        uid_participant = dao.addParticipant(uid=json['uid'], gid=gid, isAdmin=['isadmin'])  #uid comes from json
+        return jsonify({"added_participant": uid_participant})
 
-    def addUserToGroup(self, new_user):
-        # dao = Chat_GroupsDAO()
-        # if gid and gname and uid and uname:
-        #     if dao.getUserInGroup(gid, uid):
-        #         return jsonify(Error="User Already in Group"), 400
-        #     else:
-        #         g_id = dao.addUserToGroup(gid, gname, uid, uname)
-        #         return jsonify(g_id)
-        # else:
-        #     return jsonify(Error="Unexpected attributes in post request"), 400
-        new_user['uid'] = 6
-        self.users.append(new_user)
-        return jsonify(new_user)
-
-    def removeUserFromGroup(self, gid, uid):
-        # dao = Chat_GroupsDAO()
-        # if not dao.getUserInGroup(gid, uid):
-        #     return jsonify(Error = "User not found."), 404
-        # else:
-        #     dao.deleteUserFromGroup(gid, uid)
-        #     return jsonify(DeleteStatus = "OK"), 200
-        return jsonify(self.users[0])
-
+    def removeParticipant(self, gid, json):
+        dao = Chat_GroupsDAO()
+        result = dao.removeParticipants(uid=json['uid'], gid=gid)  # uid comes from json
+        return jsonify({"removed_participant": result})
 
     def deleteGroup(self, gid):
-        # dao = Chat_GroupsDAO()
-        # if not dao.getGroupById(gid):
-        #     return jsonify(Error = "Part not found."), 404
-        # else:
-        #     dao.deleteGroup(gid)
-        #     return jsonify(DeleteStatus = "OK"), 200
+
     
         return jsonify(self.groups[0])

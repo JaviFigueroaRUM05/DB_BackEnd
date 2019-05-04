@@ -66,8 +66,7 @@ class Chat_GroupsDAO:
             result.append(row)
         return result
 
-        # get all users on a group
-
+     # get admins on a group
     def getAdminsInAGroup(self, gid):
         cursor = self.conn.cursor()
         query = "select uid, isAdmin, uname, first_name, last_name, email, phone " \
@@ -79,60 +78,55 @@ class Chat_GroupsDAO:
             result.append(row)
         return result
 
-    def getUserInGroup(self, gid, uid):
+    # get a specific user in a group
+    def getParticipantInGroup(self, gid, uid):
         cursor = self.conn.cursor()
-        query = "select * from participants where group_id = %s AND participant_id = %s;;"
+        query = "select * from participants where gid = %s AND uid = %s;"
         cursor.execute(query, (gid, uid,))
         result = cursor.fetchone()
         return result
 
-    def getGroupName(self, gname):
+    # creates a new group
+    def createNewGroup(self, gname, gphoto):
         cursor = self.conn.cursor()
-        query = "select * from chat_groups where gname = %s;"
-        cursor.execute(query, (gname))
-        result = cursor.fetchone()
-        return result
-
-    def getGroupsByAdmin(self, admin):
-        cursor = self.conn.cursor()
-        query = "select gid from chat_administration where admin = %s;"
-        cursor.execute(query, (admin,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
-
-    def createNewGroup(self, gname, gphoto, gadmin):
-        cursor = self.conn.cursor()
-        query = "insert into chat_groups(gname, gphoto, gadmin) values (%s, %s, %s) returning gid;"
-        cursor.execute(query, (gname, gphoto, gadmin,))
+        query = "insert into cgroup(gname, gphoto) values (%s, %s) returning gid;"
+        cursor.execute(query, (gname, gphoto, ))
         gid = cursor.fetchone()[0]
         self.conn.commit()
         return gid
 
-    def addUserToGroup(self, gid, gname, uid, uname):
+    # adds a participant in a group
+    def addParticipant(self, uid, gid, isAdmin):
         cursor = self.conn.cursor()
-        query = "insert into participants(group_id, group_name, participant_id, participant_name) values (%s, %s, %s, %s) returning participant_name;"
-        cursor.execute(query, (gid, gname, uid, uname,))
-        participant_name = cursor.fetchone()[0]
-        self.conn.commit()
-        return participant_name
-
-    # users param is an array that will be passed when the admin selects the users to
-    # add fro his/her contact list. Particiapnts will be added to table Particiapnts, which
-    # will serve as the intermediate between the chat_groups and user tables.
-    def addUsersToGroup(self, gid, gname, users):
-        cursor = self.conn.cursor()
-        added_users=[]
-        for user in users:
-            user_id = user[0]
-            user_name = user[1]
-            query = "insert into participants(group_id, group_name, participant_id, participant_name) values (%d, %s, %d, %s) returning uid;"
-            cursor.execute(query, (gid, gname, user_id, user_name))
-            uid = cursor.fetchone()[3]
+        getuser = self.getParticipantInGroup(gid,uid)
+        if(self.getParticipantInGroup(gid,uid) is not None):
+            return "user already in group"
+        else:
+            admin = False
+            if(isAdmin == 'true'):
+                admin = True
+            else:
+                admin = False
+            query = "insert into participants(uid, gid, isAdmin) values (%s, %s, %s) returning uid;"
+            cursor.execute(query, (uid, gid, admin, ))
+            result = cursor.fetchone()[0]
             self.conn.commit()
-            added_users.append(uid)
-        return added_users
+            return result
+
+    #removes a participant from a group
+    def removeParticipants(self, uid, gid):
+        cursor = self.conn.cursor()
+        getuser = self.getParticipantInGroup(gid, uid)
+        if (getuser is None):
+            return "user not in group"
+        else:
+            query = "delete from participants where uid = %s AND gid = %s returning uid;"
+            cursor.execute(query, (uid, gid,))
+            result = cursor.fetchone()
+            self.conn.commit()
+            return result
+
+    # ---------------------- yet to implement through handlers --------
 
     #delete group from own's personal group collection
     def deleteGroupIfUser(self, uid):
@@ -153,12 +147,5 @@ class Chat_GroupsDAO:
         cursor = self.conn.cursor()
         query = "insert into chat_administration(gid, admin) where values(%s, %s) returning uid; "
         cursor.execute(query, (gid, uid,))
-        self.conn.commit()
-        return uid
-
-    def deleteUserFromGroup(self, gid, uid):
-        cursor = self.conn.cursor()
-        query = "delete from participants where group_id = %s AND participant_id = %s; "
-        cursor.execute(query, (gid, uid))
         self.conn.commit()
         return uid

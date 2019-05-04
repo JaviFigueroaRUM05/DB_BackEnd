@@ -130,24 +130,28 @@ def getSpecificGroupAdmins(gid):
 
 
 # create new chat group
-@app.route('/group/create', methods=['POST'])
+# added and tested
+@app.route('/groups/create', methods=['POST'])
 def createGroup():
-    if request.method == 'POST': return jsonify(Output="POST request received")
+    if request.method == 'POST': return Chat_GroupsHandler().createNewGroup(json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 # add participant to specific chat group
+# tested
 @app.route('/groups/<int:gid>/add-participant', methods=['POST'])
 def addParticipantsToGroup(gid):
-    if request.method == 'POST': return jsonify(Output="POST request received")
+    if request.method == 'POST': return Chat_GroupsHandler().addParticipant(gid=gid, json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 # delete participants from a specific group
+# tested
 @app.route('/groups/<int:gid>/delete-participants', methods=['DELETE'])
 def deleteparticipantsFromGroup(gid):
-    if request.method == 'DELETE': return jsonify(Output="DELETE request received")
+    if request.method == 'DELETE': return Chat_GroupsHandler().removeParticipant(gid=gid, json=request.json)
     else:                          return jsonify(Error="Method not allowed."), 405
 
 # delete group (only for admins)
+#
 @app.route('/groups/<int:gid>/delete-group', methods=['DELETE'])
 def deleteGroup(gid):
     if request.method == 'DELETE': return jsonify(Output="DELETE request received")
