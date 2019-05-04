@@ -102,6 +102,24 @@ class PostsDAO:
             user_list.append(row)
         return user_list
 
+    def createNewPost(self, pdate, message, mediaType, media, uid, gid):
+        cursor = self.conn.cursor()
+        query = "insert into Post(pdate, message, mediaType, media, uid, gid) values (%s, %s, %s, %s, %s, %s) returning postid;"
+        cursor.execute(query, (pdate, message, mediaType, media, uid, gid,))
+        pid = cursor.fetchone()[0]
+        self.conn.commit()
+        return pid
+
+    def addReply(self, opid, replyid):
+        cursor = self.conn.cursor()
+        query = "insert into replies(opid, replyid) values (%s, %s);"
+        cursor.execute(query, (opid, replyid,))
+        pid = cursor.fetchone()
+        self.conn.commit()
+        return pid
+
+    # ----------- not implemented as of yeet--------------------
+
     # get all Replies for a single post; returns array of post ids, which are the post id for those replies
     def getRepliesByPost(self, pid):
         cursor = self.conn.cursor()
@@ -132,13 +150,3 @@ class PostsDAO:
         for row in cursor:
             result.append(row)
         return result
-
-    def createNewPost(self, post_date, media, message, gid, reply_to_post, uid):
-        cursor = self.conn.cursor()
-        query = "insert into Post(post_date, media, message, gid, reply_to_post) values (%s, %s, %s, %s, %s) returning pid;"
-        cursor.execute(query, (post_date, media, message, gid, reply_to_post,))
-        pid = cursor.fetchone()[0]
-        query1 = "insert into user_post(uid, pid) values (%s, %s);"
-        cursor.execute(query1, (uid, pid,))
-        self.conn.commit()
-        return pid

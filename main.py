@@ -122,12 +122,16 @@ def getSpecificGroup(gid):
     # tested - works
     # method to get metadata of a group a user belongs to
 
-
 @app.route('/groups/<int:gid>/admins', methods=['GET'])
 def getSpecificGroupAdmins(gid):
     if request.method == 'GET': return Chat_GroupsHandler().getGroupAdmins(gid=gid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
+#tested
+@app.route('/groups/<int:gid>/edit-admins', methods=['PUT'])
+def editGroupAdmins(gid):
+    if request.method == 'PUT': return Chat_GroupsHandler().editGroupAdmins(gid=gid, json=request.json)
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 # create new chat group
 # added and tested
@@ -158,10 +162,10 @@ def deleteGroup(gid):
     else:                          return jsonify(Error="Method not allowed."), 405
 
 # authors a post to the specified group
-#
+# tested
 @app.route('/groups/<int:gid>/create-post', methods=['POST'])
 def createPost(gid):
-    if request.method == 'POST': return jsonify(Output="POST request received")
+    if request.method == 'POST': return PostsHandler().createNewPost(gid=gid, json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 # tested - works
@@ -179,9 +183,10 @@ def getSpecificPost(gid, pid):
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # reply to a specific group
+# tested
 @app.route('/groups/<int:gid>/reply', methods=['POST'])
 def replyToPost(gid):
-    if request.method == 'POST': return jsonify(Output="POST request received")
+    if request.method == 'POST': return PostsHandler().getPostsById(gid=gid, json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 # tested - works

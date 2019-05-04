@@ -136,11 +136,10 @@ class Chat_GroupsDAO:
         self.conn.commit()
         return result
 
-    # ---------------------- yet to implement through handlers --------
-
-    def setGroupAdmin(self, uid, gid):
+    def editGroupAdmins(self, uid, gid, isadmin):
         cursor = self.conn.cursor()
-        query = "insert into chat_administration(gid, admin) where values(%s, %s) returning uid; "
-        cursor.execute(query, (gid, uid,))
+        query = "update participants set isAdmin=%s where uid= %s and gid = %s returning uid; "
+        cursor.execute(query, (isadmin, uid, gid,))
+        result = cursor.fetchone()[0]
         self.conn.commit()
-        return uid
+        return result

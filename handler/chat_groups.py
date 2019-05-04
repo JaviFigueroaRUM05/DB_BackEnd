@@ -100,6 +100,14 @@ class Chat_GroupsHandler:
                 admins.append(self.build_chat_groups_participants_dict(admin))
             return jsonify({"admins": admins}), 200
 
+    def editGroupAdmins(self, gid, json):
+        dao = Chat_GroupsDAO()
+        uid = json['uid']
+        isadmin = json['isAdmin']
+        result = dao.editGroupAdmins(uid, gid, isadmin)
+        return jsonify({'reply_id': result})
+
+
     def createNewGroup(self, json):
         dao = Chat_GroupsDAO()
         try:
