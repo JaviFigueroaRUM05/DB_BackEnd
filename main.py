@@ -186,7 +186,7 @@ def getSpecificPost(gid, pid):
 # tested
 @app.route('/groups/<int:gid>/reply', methods=['POST'])
 def replyToPost(gid):
-    if request.method == 'POST': return PostsHandler().getPostsById(gid=gid, json=request.json)
+    if request.method == 'POST': return PostsHandler().createAReply(gid=gid, json=request.json)
     else:                        return jsonify(Error="Method not allowed."), 405
 
 # tested - works
@@ -197,6 +197,7 @@ def dash_GetAllChatGroups():
     else:                       return jsonify(Error="Method not allowed."), 405
 
 # tested - works
+
 # see all groups available
 @app.route('/dashboard/groups/admins', methods=['GET'])
 def dash_getAllAdmins():

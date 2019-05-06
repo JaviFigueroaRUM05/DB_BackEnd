@@ -53,7 +53,6 @@ class PostsHandler:
             result_list.append(result)
         return jsonify(Posts=result_list)
 
-
     def getPostsById(self, gid, pid):
         dao = PostsDAO()
         row = dao.getPostById(gid, pid)
@@ -69,7 +68,6 @@ class PostsHandler:
                 users_list.append(result)
             response = {"Post": post_info, "Reactions_Users" : users_list}
             return jsonify(response)
-
 
     def createNewPost(self, gid, json):
         dao = PostsDAO()
@@ -91,4 +89,4 @@ class PostsHandler:
         opid = json['opid']
         replyid = dao.createNewPost(pdate, message, mediaType, media, uid, gid)
         result = dao.addReply(opid, replyid)
-        return jsonify({"post_added": result})
+        return jsonify({"reply_added": result})

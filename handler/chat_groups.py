@@ -88,7 +88,6 @@ class Chat_GroupsHandler:
             chat_info['participants'] = result_list
             return jsonify(chat_info)
 
-
     def getGroupAdmins(self, gid):
         dao = Chat_GroupsDAO()
         admin_list = dao.getAdminsInAGroup(gid=gid)
