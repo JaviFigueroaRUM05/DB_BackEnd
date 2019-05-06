@@ -111,7 +111,7 @@ class Chat_GroupsHandler:
         dao = Chat_GroupsDAO()
         try:
             if json.get('gname') :
-                gid = dao.createNewGroup(gname=json['gname'], gphoto=['gphoto'])
+                gid = dao.createNewGroup(gname=json['gname'], gphoto=json['gphoto'])
             else:
                 return jsonify(Error='Group name not provided.'), 400
         except IntegrityError as e:
@@ -122,7 +122,7 @@ class Chat_GroupsHandler:
 
     def addParticipant(self, gid, json):
         dao = Chat_GroupsDAO()
-        uid_participant = dao.addParticipant(uid=json['uid'], gid=gid, isAdmin=['isadmin'])  #uid comes from json
+        uid_participant = dao.addParticipant(uid=json['uid'], gid=gid, isAdmin=json['isAdmin'])  # added json to last param. -Brian
         return jsonify({"added_participant": uid_participant})
 
     def removeParticipant(self, gid, json):
