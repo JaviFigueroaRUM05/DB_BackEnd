@@ -104,7 +104,7 @@ class Chat_GroupsHandler:
         uid = json['uid']
         isadmin = json['isAdmin']
         result = dao.editGroupAdmins(uid, gid, isadmin)
-        return jsonify({'reply_id': result})
+        return jsonify({'edited_admin': result})
 
 
     def createNewGroup(self, json):

@@ -112,9 +112,9 @@ class PostsDAO:
 
     def addReply(self, opid, replyid):
         cursor = self.conn.cursor()
-        query = "insert into replies(opid, replyid) values (%s, %s);"
+        query = "insert into replies(opid, replyid) values (%s, %s) returning replyid;"
         cursor.execute(query, (opid, replyid,))
-        pid = cursor.fetchone()
+        pid = cursor.fetchone()[0]
         self.conn.commit()
         return pid
 
