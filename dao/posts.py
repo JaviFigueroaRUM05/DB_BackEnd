@@ -32,18 +32,18 @@ class PostsDAO:
                 "      where replies.replyID = p2.postID and replies.opID = p1.postID) as replies_table" \
                 "      on all_posts.postid = replies_table.reply) as all_and_replies " \
                 "           left outer join" \
-                "      (select likes, dislikes, pid1 " \
+                "      (select likes, dislikes, pid1, pid2 " \
                 "       from (select count(rid) as likes, post.postID as pid1" \
                 "               from reaction, post" \
                 "               where reaction.postid = post.postid and rType='L'" \
                 "               group by post.postID) as likes_tables" \
-                "                   left outer join" \
+                "                   full outer join" \
                 "            (select count(rid) as dislikes, post.postID as pid2" \
                 "               from reaction, post" \
                 "               where reaction.postid = post.postid and rType='D'" \
                 "               group by post.postID) as dislikes_table" \
                 "               on pid1 = pid2) as reactions" \
-                "                on all_and_replies.postid = reactions.pid1 ) as g_posts_info	" \
+                "                on all_and_replies.postid = reactions.pid1 or all_and_replies.postid = reactions.pid2) as g_posts_info	" \
                 "                   left outer join" \
                 "                   (select postid as pid3, uid as uid3, uname" \
                 "                   from users natural inner join post natural inner join cgroup" \
