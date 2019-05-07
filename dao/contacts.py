@@ -23,6 +23,18 @@ class ContactsDAO:
             result.append(row)
         return result
 
+
+    def getContactsNotInGroup(self, uid, gid):
+        cursor = self.conn.cursor()
+        query = "select uid, uname, first_name, last_name, email, phone " \
+                "from users where uid in (select cid from contacts where uid = %s) " \
+                "and uid not in (select uid from participants where gid = %s)"
+        cursor.execute(query, (uid,gid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getContactById(self, uid, cid):
         cursor = self.conn.cursor()
         query = "select uid, uname, first_name, last_name, email, phone " \

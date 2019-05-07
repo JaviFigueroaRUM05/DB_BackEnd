@@ -55,6 +55,11 @@ def getAllContacts():
     if request.method == 'GET': return UserHandler().getAllContacts(uid=request.headers.get('Authorization'))
     else:                       return jsonify(Error="Method not allowed."), 405
 
+# Gets User Contacts
+@app.route('/user/contacts/not-in-group/<int:gid>', methods=['GET'])
+def getContactsNotInGroup(gid):
+    if request.method == 'GET': return UserHandler().getContactsNotInGroup(uid=request.headers.get('Authorization'), gid = gid)
+    else:                       return jsonify(Error="Method not allowed."), 405
 
 # get a specific contact from a user's contact list.
 @app.route('/user/contacts/<int:cid>', methods=['GET'])

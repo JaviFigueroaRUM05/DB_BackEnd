@@ -89,6 +89,20 @@ class UserHandler:
         response = {'contacts': contactList}
         return jsonify(response)
 
+    def getContactsNotInGroup(self, uid, gid):
+        if not uid:
+            return jsonify(Error="No Authorization header sent."), 401
+        if not gid:
+            return jsonify(Error="No gid sent."), 401
+        dao = ContactsDAO()
+        contacts = dao.getContactsNotInGroup(uid=uid, gid=gid)
+        contactList = []
+        for contact in contacts:
+            contactList.append(self._buildUserResponse(user_tuple=contact))
+        response = {'contacts': contactList}
+        return jsonify(response)
+
+
     # Currently does not use authUID for anything.
     def getAllContactsDashboard(self, uid, authUID):
         if not authUID:
