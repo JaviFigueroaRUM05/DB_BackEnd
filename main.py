@@ -154,9 +154,9 @@ def addParticipantsToGroup(gid):
 
 # delete participants from a specific group
 # tested
-@app.route('/groups/<int:gid>/delete-participants', methods=['DELETE'])
-def deleteparticipantsFromGroup(gid):
-    if request.method == 'DELETE': return Chat_GroupsHandler().removeParticipant(gid=gid, json=request.json)
+@app.route('/groups/<int:gid>/delete-participant/<int:uid>', methods=['DELETE'])
+def deleteparticipantsFromGroup(gid, uid):
+    if request.method == 'DELETE': return Chat_GroupsHandler().removeParticipant(gid=gid, uid=uid)
     else:                          return jsonify(Error="Method not allowed."), 405
 
 # delete group (only for admins)

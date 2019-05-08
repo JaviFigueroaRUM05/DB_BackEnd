@@ -125,9 +125,9 @@ class Chat_GroupsHandler:
         uid_participant = dao.addParticipant(uid=json['uid'], gid=gid, isAdmin=json['isAdmin'])  # added json to last param. -Brian
         return jsonify({"added_participant": uid_participant})
 
-    def removeParticipant(self, gid, json):
+    def removeParticipant(self, gid, uid):
         dao = Chat_GroupsDAO()
-        result = dao.removeParticipants(uid=json['uid'], gid=gid)  # uid comes from json
+        result = dao.removeParticipants(uid=uid, gid=gid)
         return jsonify({"removed_participant": result})
 
     def deleteGroup(self, gid):
