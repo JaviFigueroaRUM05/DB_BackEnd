@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.posts import PostsDAO
+from dao.hashtags import  HashtagsDAO
 
 class PostsHandler:
 
@@ -71,13 +72,24 @@ class PostsHandler:
 
     def createNewPost(self, gid, json):
         dao = PostsDAO()
+        hdao = HashtagsDAO()
         pdate= json['pdate']
         message = json['message']
         mediaType = json['mediaType']
         media = json['media']
         uid = json['uid']
-        result = dao.createNewPost(pdate, message, mediaType, media, uid, gid)
-        return jsonify({"post_added": result})
+
+        postid = dao.createNewPost(pdate, message, mediaType, media, uid, gid)
+
+        tag_list = [tag.strip("#") for tag in message.split() if tag.startswith("#")]
+
+        for tag in tag_list:
+            hid = hdao.getHashtagID(tag)
+            if(hid == None):
+                hid = hdao.createHashtag(tag)
+            hdao.addTaggedPost(hid, postid)
+
+        return jsonify({"post_added": postid})
 
     def createAReply(self, gid, json):
         dao = PostsDAO()
