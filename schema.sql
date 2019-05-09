@@ -23,7 +23,7 @@ Create table Reaction(rid serial primary key, rDate timestamp NOT NULL, rType ch
 Create table Replies(opID integer references Post(postID) NOT NULL, replyID integer references Post(postID) NOT NULL,
                      primary key (opID, replyID));
 
-Create table Hashtag(hid serial primary key, hName varchar(20) NOT NULL UNIQUE);
+Create table Hashtag(hid serial primary key, hName text NOT NULL UNIQUE);
 
 Create table Tagged(postID integer references Post(postID) NOT NULL, hid integer references Hashtag(hid) NOT NULL,
                     primary key (postID, hid));
