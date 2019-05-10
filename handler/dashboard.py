@@ -178,67 +178,63 @@ class DashboardHandler:
             return jsonify(Error=str(e))
 
     @staticmethod
-    def get_all_replies_by_date(date):
+    def get_all_replies_by_date():
         dao = DashboardDao()
         try:
-            query_result = dao.get_all_replies_by_date(date)
+            query_result = dao.get_all_replies_by_date()
             result = []
             for row in query_result:
                 dic = {}
                 dic['date'] = row[0]
-                dic['message'] = row[1]
-                dic['mediaType'] = row[2]
-                dic['media'] = row[3]
-                dic['gName'] = row[4]
-                dic['uName'] = row[5]
-                dic['pid'] = row[6]
-                result.append(dic)
-            return jsonify(result)
-        except IntegrityError as e:
-            print(e)
-            return jsonify(Error=str(e))
-
-    @staticmethod
-    def get_likes_by_date(date):
-        dao = DashboardDao()
-        try:
-            query_result = dao.get_likes_by_date(date)
-            result = []
-            for row in query_result:
-                dic = {}
-                dic['count'] = row[0]
-                result.append(dic)
-            return jsonify(result)
-        except IntegrityError as e:
-            print(e)
-            return jsonify(Error=str(e))
-
-    @staticmethod
-    def get_dislikes_by_date(date):
-        dao = DashboardDao()
-        try:
-            query_result = dao.get_dislikes_by_date(date)
-            result = []
-            for row in query_result:
-                dic = {}
-                dic['count'] = row[0]
-                result.append(dic)
-            return jsonify(result)
-        except IntegrityError as e:
-            print(e)
-            return jsonify(Error=str(e))
-
-    @staticmethod
-    def get_active_users_by_date(date):
-        dao = DashboardDao()
-        try:
-            query_result = dao.get_active_users_by_date(date)
-            result = []
-            for row in query_result:
-                dic = {}
-                dic['uName'] = row[0]
                 dic['count'] = row[1]
                 result.append(dic)
+            return jsonify(result)
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
+
+    @staticmethod
+    def get_likes_by_date():
+        dao = DashboardDao()
+        try:
+            query_result = dao.get_likes_by_date()
+            result = []
+            for row in query_result:
+                dic = {}
+                dic['date'] = row[0]
+                dic['count'] = row[1]
+                result.append(dic)
+            return jsonify(result)
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
+
+    @staticmethod
+    def get_dislikes_by_date():
+        dao = DashboardDao()
+        try:
+            query_result = dao.get_dislikes_by_date()
+            result = []
+            for row in query_result:
+                dic = {}
+                dic['date'] = row[0]
+                dic['count'] = row[1]
+                result.append(dic)
+            return jsonify(result)
+        except IntegrityError as e:
+            print(e)
+            return jsonify(Error=str(e))
+
+    @staticmethod
+    def get_active_users_by_date():
+        dao = DashboardDao()
+        try:
+            query_result = dao.get_active_users_by_date()
+            result = {}
+            for row in query_result:
+                result[str(row[0])] = []
+            for row in query_result:
+                result[str(row[0])].append({ 'uname' : row[1], 'count' : row[2] })
             return jsonify(result)
         except IntegrityError as e:
             print(e)
