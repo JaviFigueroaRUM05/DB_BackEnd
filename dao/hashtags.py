@@ -19,7 +19,7 @@ class HashtagsDAO:
 
     def createHashtag(self, hname):
         cursor = self.conn.cursor()
-        query = "insert into hashtag(hname) values (%s) returning hid;"
+        query = "insert into hashtag(hname) values(%s) returning hid;"
         cursor.execute(query, (hname,))
         hid = cursor.fetchone()[0]
         self.conn.commit()
