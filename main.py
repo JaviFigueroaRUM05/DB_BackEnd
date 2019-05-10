@@ -187,6 +187,12 @@ def getSpecificPost(gid, pid):
     if request.method == 'GET': return PostsHandler().getPostsById(gid,pid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
+# get specific post from group
+@app.route('/groups/<int:gid>/posts/<int:pid>/replies', methods=['GET'])
+def getRepliesToPost(gid, pid):
+    if request.method == 'GET': return PostsHandler().getRepliesByOP(pid)
+    else:                       return jsonify(Error="Method not allowed."), 405
+
 # reply to a specific group
 # tested
 @app.route('/groups/<int:gid>/reply', methods=['POST'])

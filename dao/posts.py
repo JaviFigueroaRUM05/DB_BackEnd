@@ -118,17 +118,20 @@ class PostsDAO:
         self.conn.commit()
         return pid
 
-    # ----------- not implemented as of yeet--------------------
-
-    # get all Replies for a single post; returns array of post ids, which are the post id for those replies
+    # get all Replies for a single post;
     def getRepliesByPost(self, pid):
         cursor = self.conn.cursor()
-        query = "select * from post where reply_to_post = %s;"
+        query = "select postid, pdate, message, mediatype, media, uid, gid, uname " \
+                "from post natural inner join users " \
+                "where postid in (select replyid from replies where opid = %s) " \
+                "order by pdate;"
         cursor.execute(query, (pid,))
         result = []
         for row in cursor:
             result.append(row)
         return result
+
+    # ----------- not implemented as of yeet--------------------
 
     # get all photos of specific group :: needs to be worked on
     # either use join with pid as common attribute or put al info in new table
