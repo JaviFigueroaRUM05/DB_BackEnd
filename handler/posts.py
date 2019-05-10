@@ -71,6 +71,18 @@ class PostsHandler:
             response = {"Post": post_info, "Reactions_Users" : users_list}
             return jsonify(response)
 
+
+    def getRepliesByOP(self, pid):
+        dao = PostsDAO()
+        rows = dao.getRepliesByPost(pid)
+        reply_list=[]
+        for row in rows:
+            post_info = self.build_post_dict(row)
+            post_info['uname'] = row[7]
+            reply_list.append(post_info)
+        response = {"Replies": reply_list}
+        return jsonify(response)
+
     def createNewPost(self, gid, json):
         dao = PostsDAO()
         pdate= json['pdate']
