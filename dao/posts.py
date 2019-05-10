@@ -150,3 +150,4 @@ class PostsDAO:
         for row in cursor:
             result.append(row)
         return result
+
