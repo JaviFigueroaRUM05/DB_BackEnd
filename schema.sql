@@ -7,7 +7,7 @@ Create table Contacts(uid integer references Users(uid) NOT NULL,
                       cid integer references Users(uid) NOT NULL CHECK (cid <> uid),
                       primary key (uid, cid));
 
-Create table Cgroup(gid serial primary key, gName varchar (20) NOT NULL, gPhoto varchar (100));
+Create table Cgroup(gid serial primary key, gName varchar (20) NOT NULL, gPhoto text);
 
 Create table Participants(uid integer references Users(uid) NOT NULL, gid integer references Cgroup(gid) NOT NULL,
                             primary key (uid,gid), isAdmin boolean NOT NULL);
