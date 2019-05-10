@@ -157,20 +157,15 @@ class DashboardHandler:
             return jsonify(Error=str(e))
 
     @staticmethod
-    def get_all_posts_by_user_date(uid, date):
+    def get_all_posts_by_user_date(uid):
         dao = DashboardDao()
         try:
-            query_result = dao.get_all_posts_by_user_date(uid, date)
+            query_result = dao.get_all_posts_by_user_date(uid)
             result = []
             for row in query_result:
                 dic = {}
                 dic['date'] = row[0]
-                dic['message'] = row[1]
-                dic['mediaType'] = row[2]
-                dic['media'] = row[3]
-                dic['gName'] = row[4]
-                dic['uName'] = row[5]
-                dic['pid'] = row[6]
+                dic['count'] = row[1]
                 result.append(dic)
             return jsonify(result)
         except IntegrityError as e:
