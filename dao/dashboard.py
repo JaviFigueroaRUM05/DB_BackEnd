@@ -82,14 +82,13 @@ class DashboardDao:
             result.append(row)
         return result
 
-    def get_all_posts_by_user_date(self, uid, date):
+    def get_all_posts_by_user_date(self, uid):
         cursor = self.conn.cursor()
-        query = "select pDate, message, mediaType, media, gName, uname, postid " \
+        query = "select date(pDate), count(*) " \
                 "from (Post natural inner join Users) natural inner join Cgroup " \
-                "where uid = %s and (pDate between %s and %s)"
-        start_date = date + " 00:00:00"
-        end_date   = date + " 23:59:59"
-        cursor.execute(query, (uid, start_date, end_date,))
+                "where uid = %s " \
+                "group by date(pDate)"
+        cursor.execute(query, (uid,))
         result = []
         for row in cursor:
             result.append(row)

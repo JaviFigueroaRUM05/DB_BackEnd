@@ -296,10 +296,10 @@ def dash_daily_posts_count():
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/dashboard/daily-posts/<date>/user/<int:uid>', methods=['GET'])
-def dash_user_daily_posts(uid, date):
+@app.route('/dashboard/daily-posts/user/<int:uid>', methods=['GET'])
+def dash_user_daily_posts(uid):
     handler = DashboardHandler()
-    if request.method == 'GET': return handler.get_all_posts_by_user_date(uid, date)
+    if request.method == 'GET': return handler.get_all_posts_by_user_date(uid)
     else:                       return jsonify(Error="Method not allowed."), 405
 
 
