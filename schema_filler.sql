@@ -47,9 +47,9 @@ insert into contacts(uid, cid) VALUES((select uid from users where uname='Javi')
     (select uid from users where uname='ManuelDB'));
 
 --Groups
-insert into cgroup(gname)VALUES('The first chat');
-insert into cgroup(gname)VALUES('Admins');
-insert into cgroup(gname)VALUES('trambolico');
+insert into cgroup(gname, gphoto)VALUES('The first chat', 'media/group_pics/succulenticon.jpg');
+insert into cgroup(gname, gphoto)VALUES('Admins', 'media/group_pics/succulenticon.jpg');
+insert into cgroup(gname, gphoto)VALUES('trambolico', 'media/group_pics/succulenticon.jpg');
 
 
 --Group Participants (how do we make sure admins are participants?)
@@ -125,11 +125,11 @@ insert into replies(replyID, opID) VALUES((select postid from post where message
 (select postid from post where message='All this talk of sensuality seems illogical.'));
 
 --Hashtags
-insert into hashtag(hname) VALUES('#pleasehelp');
+insert into hashtag(hname) VALUES('pleasehelp');
 
 --Tagged
 insert into tagged(postid, hid) VALUES((select postid from post where message='Im drowning in my classes #pleasehelp'),
-(select hid from hashtag where hname='#pleasehelp'));
+(select hid from hashtag where hname='pleasehelp'));
 
 --Reactions
 insert into reaction (rdate, rtype, postID, uid) VALUES('2019-03-17 18:43:00', 'L',
